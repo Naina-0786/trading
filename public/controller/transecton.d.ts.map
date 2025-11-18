@@ -1,0 +1,1 @@
+{"version":3,"file":"transecton.d.ts","sourceRoot":"","sources":["../../src/controller/transecton.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAMjD,eAAO,MAAM,qBAAqB;2BAEH,OAAO,OAAO,QAAQ;4BAqFrB,OAAO,OAAO,QAAQ;4BAkCtB,OAAO,OAAO,QAAQ;2BA0DvB,OAAO,OAAO,QAAQ;2BAiFtB,OAAO,OAAO,QAAQ;iCAyBhB,OAAO,OAAO,QAAQ;uCAmChB,OAAO,OAAO,QAAQ;CAiChE,CAAC"}

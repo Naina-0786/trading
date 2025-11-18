@@ -1,0 +1,1 @@
+{"version":3,"file":"subscriptoin.d.ts","sourceRoot":"","sources":["../../src/controller/subscriptoin.ts"],"names":[],"mappings":"AAAA,OAAO,KAAI,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAKhD,eAAO,MAAM,0BAA0B;gCAEH,OAAO,OAAO,QAAQ;iCAsDrB,OAAO,OAAO,QAAQ;iCAsCtB,OAAO,OAAO,QAAQ;gCA4BvB,OAAO,OAAO,QAAQ;gCAiFtB,OAAO,OAAO,QAAQ;wCAkCd,OAAO,OAAO,QAAQ;CA6CjE,CAAC"}

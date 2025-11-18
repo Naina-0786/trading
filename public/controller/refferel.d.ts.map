@@ -1,0 +1,1 @@
+{"version":3,"file":"refferel.d.ts","sourceRoot":"","sources":["../../src/controller/refferel.ts"],"names":[],"mappings":"AAAA,OAAQ,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAMlD,eAAO,MAAM,kBAAkB;wBAEH,OAAO,OAAO,QAAQ;yBAgHrB,OAAO,OAAO,QAAQ;yBAkCtB,OAAO,OAAO,QAAQ;wBAyBvB,OAAO,OAAO,QAAQ;wBA4FtB,OAAO,OAAO,QAAQ;kCA+BZ,OAAO,OAAO,QAAQ;sCAmClB,OAAO,OAAO,QAAQ;CAiC/D,CAAC"}
