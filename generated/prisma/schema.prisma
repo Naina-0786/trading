@@ -1,0 +1,260 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * Enums
+ */
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER
+  INVESTMENT
+  REFERRAL_BONUS
+  ROI
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum InvestmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ReferralStatus {
+  ACTIVE
+  EXPIRED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransferStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+/**
+ * Models
+ */
+
+model User {
+  id             String   @id @default(uuid())
+  name           String?
+  email          String   @unique
+  passwordHash   String
+  walletAddress  String? // optionally store an on-chain address
+  usdtBalance    Decimal  @default("0.000000") @db.Decimal(18, 6)
+  referralCode   String   @unique
+  referredById   String?
+  referredBy     User?    @relation("UserReferredBy", fields: [referredById], references: [id], onDelete: Cascade)
+  referrals      User[]   @relation("UserReferredBy") // inverse relation (users this user referred via referredById)
+  totalReferrals Int      @default(0)
+  totalEarnings  Decimal  @default("0.000000") @db.Decimal(18, 6)
+  currentLevel   Int      @default(0) // 0..5
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  wallet        Wallet?         @relation("UserToWallet") // Removed fields and references
+  investments   Investment[]
+  transactions  Transaction[]
+  withdrawals   Withdrawal[]
+  transfersSent Transfer[]      @relation("sentTransfers")
+  transfersRecv Transfer[]      @relation("receivedTransfers")
+  referralsMade Referral[]      @relation("Referrer")
+  referralsGot  Referral[]      @relation("Referred") // referrals where this user is the referredUser
+  roiRecords    ROIRecord[]
+  SupportTicket SupportTicket[]
+
+  @@unique([email, referralCode, referredById])
+  @@index([referredById])
+  @@index([email])
+  @@index([referralCode])
+}
+
+model Wallet {
+  userId        String   @id // use userId as primary to enforce 1:1
+  user          User     @relation("UserToWallet", fields: [userId], references: [id], onDelete: Cascade)
+  walletAddress String // on-chain address
+  qrCodeUrl     String?
+  currency      String   @default("USDT")
+  balance       Decimal  @default("0.000000") @db.Decimal(18, 6)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SubscriptionPlan {
+  id                String   @id @default(uuid())
+  name              String
+  minimumInvestment Decimal  @db.Decimal(18, 6)
+  roiPerMonth       Decimal  @db.Decimal(18, 6) // e.g., 0.10 for 10%
+  durationInMonths  Int
+  description       String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  investments Investment[]
+}
+
+model Investment {
+  id             String           @id @default(uuid())
+  userId         String
+  planId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan           SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  amountInvested Decimal          @db.Decimal(18, 6)
+  roiPercentage  Decimal          @db.Decimal(18, 6) // base ROI + any applied referral bonus (stored snapshot)
+  startDate      DateTime
+  endDate        DateTime?
+  status         InvestmentStatus @default(ACTIVE)
+  totalReturn    Decimal?         @db.Decimal(18, 6)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  roiRecords   ROIRecord[]
+  transactions Transaction[] @relation("InvestmentToTransactions")
+
+  @@index([userId])
+  @@index([planId])
+}
+
+model Referral {
+  id              String         @id @default(uuid())
+  referrerId      String
+  referredUserId  String
+  referrer        User           @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUser    User           @relation("Referred", fields: [referredUserId], references: [id], onDelete: Cascade)
+  level           Int // 1..5
+  bonusPercentage Decimal        @db.Decimal(18, 6) // e.g., 0.10 for 10%
+  bonusStartDate  DateTime
+  bonusEndDate    DateTime
+  status          ReferralStatus @default(ACTIVE)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([referrerId])
+  @@index([referredUserId])
+}
+
+model Transaction {
+  id           String            @id @default(uuid())
+  userId       String
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         TransactionType   @default(ROI)
+  amount       Decimal           @db.Decimal(18, 6)
+  currency     String            @default("USDT")
+  status       TransactionStatus @default(PENDING)
+  description  String?
+  meta         Json?
+  investmentId String? // Optional foreign key to Investment
+  investment   Investment?       @relation("InvestmentToTransactions", fields: [investmentId], references: [id], onDelete: SetNull)
+  createdAt    DateTime          @default(now())
+
+  @@index([userId])
+  @@index([investmentId])
+}
+
+model Withdrawal {
+  id                 String           @id @default(uuid())
+  userId             String
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount             Decimal          @db.Decimal(18, 6)
+  destinationAddress String
+  status             WithdrawalStatus @default(PENDING)
+  processedAt        DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([userId])
+}
+
+model Transfer {
+  id         String         @id @default(uuid())
+  senderId   String
+  receiverId String
+  sender     User           @relation("sentTransfers", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User           @relation("receivedTransfers", fields: [receiverId], references: [id], onDelete: Cascade)
+  amount     Decimal        @db.Decimal(18, 6)
+  status     TransferStatus @default(PENDING)
+  note       String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model ROIRecord {
+  id                     String      @id @default(uuid())
+  userId                 String
+  user                   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  investmentId           String?
+  investment             Investment? @relation(fields: [investmentId], references: [id], onDelete: SetNull)
+  weekNumber             Int
+  roiAmount              Decimal     @db.Decimal(18, 6)
+  isReferralBonusApplied Boolean     @default(false)
+  createdAt              DateTime    @default(now())
+
+  @@index([userId])
+  @@index([investmentId])
+}
+
+model Setting {
+  id          String @id @default(uuid())
+  phoneNumber String
+  email       String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@map("settings")
+}
+
+/**
+ * Enums
+ */
+enum SupportTicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+/**
+ * Models
+ */
+
+model SupportTicket {
+  id          String              @id @default(uuid())
+  userId      String
+  subject     String
+  description String
+  status      SupportTicketStatus @default(OPEN)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("support_tickets")
+}
