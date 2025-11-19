@@ -12,8 +12,7 @@ import withdrawalRoutes from "./routes/withdraw.routes.js";
 
 import cors from "cors";
 
-
-export const app = express();
+const app = express();
 
 app.use(cors({
   origin: "http://localhost:8080",
@@ -22,7 +21,7 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use(express.static("src/views")); 
+app.use(express.static("src/views"));
  
 app.get("/", (req, res) => {
   return res.sendFile("index.html", { root: "src/views" });
