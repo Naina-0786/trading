@@ -10,7 +10,7 @@ import userRoutes from "./routes/user.routes.js";
 import walletRoutes from "./routes/wallet.routes.js";
 import withdrawalRoutes from "./routes/withdraw.routes.js";
 import cors from "cors";
-export const app = express();
+const app = express();
 app.use(cors({
     origin: "http://localhost:8080",
     credentials: true,
