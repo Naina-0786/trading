@@ -10,6 +10,7 @@ import userRoutes from "./routes/user.routes.js";
 import walletRoutes from "./routes/wallet.routes.js";
 import withdrawalRoutes from "./routes/withdraw.routes.js";
 import cors from "cors";
+import paymentRoutes from "./routes/payment.routes.js";
 const app = express();
 app.use(cors({
     origin: "http://localhost:8080",
@@ -30,6 +31,7 @@ app.use('/api/referral', referralRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/transaction', transactionRoutes);
 app.use('/api/transfer', transferRoutes);
+app.use('/api/payment', paymentRoutes);
 // app.use('/api/settings', settingsRoutes);
 app.use(errorMiddleware);
 app.listen(4000, () => {

@@ -11,16 +11,27 @@ import walletRoutes from "./routes/wallet.routes.js";
 import withdrawalRoutes from "./routes/withdraw.routes.js";
 
 import cors from "cors";
+import paymentRoutes from "./routes/payment.routes.js";
 
 const app = express();
 
+
+
 app.use(cors({
-  origin: "http://localhost:8080",
+  origin: ["http://localhost:8080","http://localhost:8081"],
+  // origin: "*",
   credentials: true,
 }));
 
 
-app.use(express.json());
+app.use(express.json({
+  verify: (req: any, res: any, buf: any) => {
+    const url = (req as any).originalUrl;
+    if (url && url.startsWith("/api/payment/webhook")) {
+      (req as any).rawBody = buf.toString();
+    }
+  },
+}));
 app.use(express.static("src/views"));
  
 app.get("/", (req, res) => {
@@ -37,6 +48,11 @@ app.use('/api/referral', referralRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/transaction', transactionRoutes);
 app.use('/api/transfer', transferRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/payment/webhook', paymentRoutes
+
+  
+);
 // app.use('/api/settings', settingsRoutes);
 
 
