@@ -48,6 +48,7 @@ const verifypayment = async (req:any, res:any) => {
 
 const PaymentController = {
     createCharge: createpayment,
+    verifypayment: verifypayment
 };
 
 

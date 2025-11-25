@@ -1,5 +1,5 @@
 import coinbase from 'coinbase-commerce-node';
-const { Client, resources } = coinbase;
+const { Client, resources, webhook } = coinbase;
 Client.init(process.env.COINBASE_API_KEY || '');
 const createpayment = async (req, res) => {
     const { amount, currency } = req.body;
@@ -23,8 +23,18 @@ const createpayment = async (req, res) => {
         res.status(500).json({ error: 'Failed to create charge', details: error.message });
     }
 };
+const verifypayment = async (req, res) => {
+    const event = webhook.verifyEventBody(req.rawBody, req.headers['x-cc-webhook-signature'], process.env.COINBASE_WEBHOOK_SECRET || '');
+    if (event.type === 'charge:confirmed') {
+        let amount = event.data.pricing.local.amount;
+        let currency = event.data.pricing.local.currency;
+        let user_id = event.data.metadata.user_id;
+        // Handle confirmed charge (e.g., update order status, notify user)
+    }
+};
 const PaymentController = {
     createCharge: createpayment,
+    verifypayment: verifypayment
 };
 export default PaymentController;
 //# sourceMappingURL=payment.js.map

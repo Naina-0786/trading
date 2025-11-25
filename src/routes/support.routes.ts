@@ -1,14 +1,15 @@
-// routes/supportTickets.js
-const express = require('express');
-const router = express.Router();
-const {
+import { Router } from "express";
+
+const router = Router();
+
+import {
 getAllSupportTickets,
 getSupportTicketById,
 getSupportTicketsByUserId,
 createSupportTicket,
 updateSupportTicket,
 deleteSupportTicket,
-} = require('../controllers/supportTicketController');
+} from '../controller/support.js';
 
 // GET /api/support-tickets - Get all support tickets (with optional filters)
 router.get('/', getAllSupportTickets);
@@ -28,4 +29,4 @@ router.put('/:id', updateSupportTicket);
 // DELETE /api/support-tickets/:id - Delete a support ticket
 router.delete('/:id', deleteSupportTicket);
 
-module.exports = router;
+export default router;

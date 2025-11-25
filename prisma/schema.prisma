@@ -257,3 +257,20 @@ model SupportTicket {
   @@index([status])
   @@index([createdAt])
 }
+
+model admin {
+  id           String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role     AdminRole @default(ADMIN)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+}
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN  
+
+}

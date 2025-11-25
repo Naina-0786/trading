@@ -172,40 +172,6 @@ export const userController = {
                             plan: true,
                         },
                     },
-                    transactions: {
-                        include: {
-                            investment: {
-                                include: {
-                                    plan: true,
-                                },
-                            },
-                        },
-                    },
-                    withdrawals: true,
-                    transfersSent: {
-                        include: {
-                            receiver: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    email: true,
-                                    referralCode: true,
-                                },
-                            },
-                        },
-                    },
-                    transfersRecv: {
-                        include: {
-                            sender: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    email: true,
-                                    referralCode: true,
-                                },
-                            },
-                        },
-                    },
                     referralsMade: {
                         include: {
                             referredUser: {
@@ -227,15 +193,6 @@ export const userController = {
                                     name: true,
                                     email: true,
                                     referralCode: true,
-                                },
-                            },
-                        },
-                    },
-                    roiRecords: {
-                        include: {
-                            investment: {
-                                include: {
-                                    plan: true,
                                 },
                             },
                         },

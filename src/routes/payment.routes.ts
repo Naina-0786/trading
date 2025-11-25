@@ -6,6 +6,6 @@ const paymentRoutes = Router();
 const verifypaymentRoutes = Router();
 
 paymentRoutes.post("/checkout", paymentController.createCharge);
-verifypaymentRoutes.post("/webhook", (paymentController as any).verifypayment);
+verifypaymentRoutes.post("/webhook", paymentController.verifypayment);
 
 export default paymentRoutes;

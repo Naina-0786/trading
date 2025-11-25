@@ -1,10 +1,8 @@
 import type { Request, Response } from "express";
-
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import prisma from "../config/prisma.js";
 
 // Get all support tickets
-const getAllSupportTickets = async (req:any, res:any) => {
+export const getAllSupportTickets = async (req:any, res:any) => {
 try {
     const { status, page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
@@ -46,7 +44,7 @@ try {
 };
 
 // Get a single support ticket by ID
-const getSupportTicketById = async (req:any, res:any) => {
+export const getSupportTicketById = async (req:any, res:any) => {
 try {
     const { id } = req.params;
     const ticket = await prisma.supportTicket.findUnique({
@@ -78,7 +76,7 @@ try {
 };
 
 // Get support tickets by user ID
-const getSupportTicketsByUserId = async (req:any, res:any) => {
+export const getSupportTicketsByUserId = async (req:any, res:any) => {
 try {
     const { userId } = req.params;
     const { status, page = 1, limit = 10 } = req.query;
@@ -121,7 +119,7 @@ try {
 };
 
 // Create a new support ticket
-const createSupportTicket = async (req:any, res:any) => {
+export const createSupportTicket = async (req:any, res:any) => {
 try {
     const { userId, subject, description } = req.body;
     if (!userId || !subject || !description) {
@@ -168,13 +166,22 @@ try {
 };
 
 // Update a support ticket
-const updateSupportTicket = async (req: Request, res: Response) => {
+export const updateSupportTicket = async (req: Request, res: Response) => {
 try {
     const { id } = req.params;
     const { subject, description, status } = req.body;
 
+    if (!id) {
+    return res.status(400).json({
+        success: false,
+        message: 'Ticket id is required',
+    });
+    }
+
+    const ticketId = id;
+
     const existingTicket = await prisma.supportTicket.findUnique({
-    where: { id },
+    where: { id: ticketId },
     });
     if (!existingTicket) {
     return res.status(404).json({
@@ -184,7 +191,7 @@ try {
     }
 
     const ticket = await prisma.supportTicket.update({
-    where: { id },
+    where: { id: ticketId },
     data: {
         subject,
         description,
@@ -211,7 +218,7 @@ try {
 };
 
 // Delete a support ticket
-const deleteSupportTicket = async (req:any, res:any) => {
+export const deleteSupportTicket = async (req:any, res:any) => {
 try {
     const { id } = req.params;
     const ticket = await prisma.supportTicket.findUnique({
@@ -238,13 +245,4 @@ try {
     error: error.message,
     });
 }
-};
-
-module.exports = {
-getAllSupportTickets,
-getSupportTicketById,
-getSupportTicketsByUserId,
-createSupportTicket,
-updateSupportTicket,
-deleteSupportTicket,
 };
