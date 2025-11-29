@@ -18,16 +18,27 @@ import cors from "cors";
 import adminRoutes from "./routes/admin.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import qrRoutes from "./routes/qr.routes.js";
+import { corsMiddleware } from "./middleware/cors.js";
 
 const app = express();
 
 
+app.use(corsMiddleware)
+
+
 
 app.use(cors({
-  // origin: "*",
-  origin: ["http://localhost:8080", "http://localhost:8081", "https://www.expotradex.com","https://expo-trading-admin.vercel.app"],
+  origin: [
+    "http://localhost:8080",
+    "http://localhost:8081",
+    "https://www.expotradex.com",
+    "https://expo-trading-admin.vercel.app"
+  ],
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
+
 
 
 app.use(express.json({
