@@ -17,6 +17,9 @@ export const corsMiddleware = (req: Request, res: Response, next: NextFunction) 
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  
+  console.log("CORS middleware hit:", req.method, req.path);
+
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();
