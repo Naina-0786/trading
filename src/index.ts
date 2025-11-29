@@ -28,18 +28,18 @@ app.use(corsMiddleware)
 
 
 
-app.use(cors({
-  origin: [
-    "http://localhost:8080",
-    "http://localhost:8081",
-    "https://www.expotradex.com",
-    "https://expo-trading-admin.vercel.app"
-  ],
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  exposedHeaders: ["Authorization"]
-}));
+// app.use(cors({
+//   origin: [
+//     "http://localhost:8080",
+//     "http://localhost:8081",
+//     "https://www.expotradex.com",
+//     "https://expo-trading-admin.vercel.app"
+//   ],
+//   credentials: true,
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   exposedHeaders: ["Authorization"]
+// }));
 
 
 
