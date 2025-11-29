@@ -23,7 +23,7 @@ import { corsMiddleware } from "./middleware/cors.js";
 const app = express();
 
 
-app.use(corsMiddleware)
+// app.use(corsMiddleware)
 
 
 
