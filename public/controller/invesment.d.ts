@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 export declare const investmentController: {
     createInvestment(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     getInvestmentById(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
@@ -6,5 +6,6 @@ export declare const investmentController: {
     updateInvestment(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     deleteInvestment(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     getInvestmentDetails(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    accept_reject(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 };
 //# sourceMappingURL=invesment.d.ts.map

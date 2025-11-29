@@ -1,44 +1,51 @@
-import { StatusCodes } from 'http-status-codes';
-import prisma from '../config/prisma.js';
-import { InvestmentStatus } from '../../generated/prisma/index.js';
+import { StatusCodes } from "http-status-codes";
+import { InvestmentStatus, Prisma } from "../../generated/prisma/index.js";
+import prisma from "../config/prisma.js";
+import { SuccessResponse } from "../utils/response.util.js";
 export const investmentController = {
     // Create a new investment
     async createInvestment(req, res) {
         try {
-            const { userId, planId, amountInvested, roiPercentage, startDate, endDate } = req.body;
+            const { userId, planId, amountInvested, roiPercentage, startDate, endDate, } = req.body;
             // Validate required fields
-            if (!userId || !planId || amountInvested === undefined || roiPercentage === undefined || !startDate) {
+            if (!userId ||
+                !planId ||
+                amountInvested === undefined ||
+                roiPercentage === undefined ||
+                !startDate) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'userId, planId, amountInvested, roiPercentage, and startDate are required',
+                    error: "userId, planId, amountInvested, roiPercentage, and startDate are required",
                 });
             }
             // Validate numeric fields
             if (amountInvested <= 0 || roiPercentage < 0) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'amountInvested must be positive, and roiPercentage must be non-negative',
+                    error: "amountInvested must be positive, and roiPercentage must be non-negative",
                 });
             }
             // Check if user exists
             const user = await prisma.user.findUnique({ where: { id: userId } });
             if (!user) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'User not found',
+                    error: "User not found",
                 });
             }
             // Check if subscription plan exists and is active
-            const plan = await prisma.subscriptionPlan.findUnique({ where: { id: planId } });
+            const plan = await prisma.subscriptionPlan.findUnique({
+                where: { id: planId },
+            });
             if (!plan) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Subscription plan not found',
+                    error: "Subscription plan not found",
                 });
             }
             if (!plan.isActive) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'Subscription plan is not active',
+                    error: "Subscription plan is not active",
                 });
             }
             // Validate minimum investment
-            if (amountInvested < plan.minimumInvestment) {
+            if (amountInvested < Number(plan.minimumInvestment)) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
                     error: `Amount invested must be at least ${plan.minimumInvestment}`,
                 });
@@ -46,10 +53,10 @@ export const investmentController = {
             // Create investment
             const investment = await prisma.investment.create({
                 data: {
-                    userId,
-                    planId,
-                    amountInvested,
-                    roiPercentage,
+                    userId: userId,
+                    planId: planId,
+                    amountInvested: new Prisma.Decimal(amountInvested),
+                    roiPercentage: new Prisma.Decimal(roiPercentage),
                     startDate: new Date(startDate),
                     endDate: endDate ? new Date(endDate) : null,
                     status: InvestmentStatus.ACTIVE,
@@ -60,19 +67,24 @@ export const investmentController = {
                         select: { id: true, name: true, email: true },
                     },
                     plan: {
-                        select: { id: true, name: true, minimumInvestment: true, roiPerMonth: true },
+                        select: {
+                            id: true,
+                            name: true,
+                            minimumInvestment: true,
+                            roiPerMonth: true,
+                        },
                     },
                 },
             });
             return res.status(StatusCodes.CREATED).json({
-                message: 'Investment created successfully',
+                message: "Investment created successfully",
                 data: investment,
             });
         }
         catch (error) {
-            console.error('Error creating investment:', error);
+            console.error("Error creating investment:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to create investment',
+                error: "Failed to create investment",
             });
         }
     },
@@ -87,7 +99,12 @@ export const investmentController = {
                         select: { id: true, name: true, email: true },
                     },
                     plan: {
-                        select: { id: true, name: true, minimumInvestment: true, roiPerMonth: true },
+                        select: {
+                            id: true,
+                            name: true,
+                            minimumInvestment: true,
+                            roiPerMonth: true,
+                        },
                     },
                     roiRecords: true,
                     transactions: true,
@@ -95,7 +112,7 @@ export const investmentController = {
             });
             if (!investment) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Investment not found',
+                    error: "Investment not found",
                 });
             }
             return res.status(StatusCodes.OK).json({
@@ -103,33 +120,53 @@ export const investmentController = {
             });
         }
         catch (error) {
-            console.error('Error fetching investment:', error);
+            console.error("Error fetching investment:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch investment',
+                error: "Failed to fetch investment",
             });
         }
     },
     // Get all investments
     async getAllInvestments(req, res) {
         try {
-            const investments = await prisma.investment.findMany({
-                include: {
-                    user: {
-                        select: { id: true, name: true, email: true },
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const skip = (page - 1) * limit;
+            const [investments, total] = await Promise.all([
+                prisma.investment.findMany({
+                    skip,
+                    take: limit,
+                    include: {
+                        user: {
+                            select: { id: true, name: true, email: true },
+                        },
+                        plan: {
+                            select: {
+                                id: true,
+                                name: true,
+                                minimumInvestment: true,
+                                roiPerMonth: true,
+                            },
+                        },
                     },
-                    plan: {
-                        select: { id: true, name: true, minimumInvestment: true, roiPerMonth: true },
-                    },
-                },
-            });
+                }),
+                prisma.investment.count(),
+            ]);
+            const totalPages = Math.ceil(total / limit);
             return res.status(StatusCodes.OK).json({
                 data: investments,
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages,
+                },
             });
         }
         catch (error) {
-            console.error('Error fetching investments:', error);
+            console.error("Error fetching investments:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch investments',
+                error: "Failed to fetch investments",
             });
         }
     },
@@ -137,12 +174,12 @@ export const investmentController = {
     async updateInvestment(req, res) {
         try {
             const id = req.params.id;
-            const { amountInvested, roiPercentage, startDate, endDate, status, totalReturn } = req.body;
+            const { amountInvested, roiPercentage, startDate, endDate, status, totalReturn, } = req.body;
             // Check if investment exists
             const investment = await prisma.investment.findUnique({ where: { id } });
             if (!investment) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Investment not found',
+                    error: "Investment not found",
                 });
             }
             // Prepare update data
@@ -150,24 +187,26 @@ export const investmentController = {
             if (amountInvested !== undefined) {
                 if (amountInvested <= 0) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'amountInvested must be positive',
+                        error: "amountInvested must be positive",
                     });
                 }
-                const plan = await prisma.subscriptionPlan.findUnique({ where: { id: investment.planId } });
-                if (plan && amountInvested < plan.minimumInvestment) {
+                const plan = await prisma.subscriptionPlan.findUnique({
+                    where: { id: investment.planId },
+                });
+                if (plan && amountInvested < Number(plan.minimumInvestment)) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
                         error: `Amount invested must be at least ${plan.minimumInvestment}`,
                     });
                 }
-                updateData.amountInvested = amountInvested;
+                updateData.amountInvested = new Prisma.Decimal(amountInvested);
             }
             if (roiPercentage !== undefined) {
                 if (roiPercentage < 0) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'roiPercentage must be non-negative',
+                        error: "roiPercentage must be non-negative",
                     });
                 }
-                updateData.roiPercentage = roiPercentage;
+                updateData.roiPercentage = new Prisma.Decimal(roiPercentage);
             }
             if (startDate)
                 updateData.startDate = new Date(startDate);
@@ -176,7 +215,7 @@ export const investmentController = {
             if (status) {
                 if (!Object.values(InvestmentStatus).includes(status)) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'Invalid investment status',
+                        error: "Invalid investment status",
                     });
                 }
                 updateData.status = status;
@@ -192,19 +231,24 @@ export const investmentController = {
                         select: { id: true, name: true, email: true },
                     },
                     plan: {
-                        select: { id: true, name: true, minimumInvestment: true, roiPerMonth: true },
+                        select: {
+                            id: true,
+                            name: true,
+                            minimumInvestment: true,
+                            roiPerMonth: true,
+                        },
                     },
                 },
             });
             return res.status(StatusCodes.OK).json({
-                message: 'Investment updated successfully',
+                message: "Investment updated successfully",
                 data: updatedInvestment,
             });
         }
         catch (error) {
-            console.error('Error updating investment:', error);
+            console.error("Error updating investment:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to update investment',
+                error: "Failed to update investment",
             });
         }
     },
@@ -215,18 +259,18 @@ export const investmentController = {
             const investment = await prisma.investment.findUnique({ where: { id } });
             if (!investment) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Investment not found',
+                    error: "Investment not found",
                 });
             }
             await prisma.investment.delete({ where: { id } });
             return res.status(StatusCodes.OK).json({
-                message: 'Investment deleted successfully',
+                message: "Investment deleted successfully",
             });
         }
         catch (error) {
-            console.error('Error deleting investment:', error);
+            console.error("Error deleting investment:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to delete investment',
+                error: "Failed to delete investment",
             });
         }
     },
@@ -241,7 +285,12 @@ export const investmentController = {
                         select: { id: true, name: true, email: true },
                     },
                     plan: {
-                        select: { id: true, name: true, minimumInvestment: true, roiPerMonth: true },
+                        select: {
+                            id: true,
+                            name: true,
+                            minimumInvestment: true,
+                            roiPerMonth: true,
+                        },
                     },
                     roiRecords: {
                         select: {
@@ -265,7 +314,7 @@ export const investmentController = {
             });
             if (!investment) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Investment not found',
+                    error: "Investment not found",
                 });
             }
             return res.status(StatusCodes.OK).json({
@@ -273,9 +322,28 @@ export const investmentController = {
             });
         }
         catch (error) {
-            console.error('Error fetching investment details:', error);
+            console.error("Error fetching investment details:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch investment details',
+                error: "Failed to fetch investment details",
+            });
+        }
+    },
+    async accept_reject(req, res) {
+        try {
+            const id = req.params.id;
+            const { status } = req.body;
+            const acceptReject = await prisma.investment.update({
+                where: { id },
+                data: {
+                    status: status,
+                },
+            });
+            return SuccessResponse(res, "investment updated successfully", acceptReject);
+        }
+        catch (error) {
+            console.error("Error fetching investment details:", error);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                error: "Failed to fetch investment details",
             });
         }
     },

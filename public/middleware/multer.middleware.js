@@ -19,13 +19,13 @@ const upload = multer({
     },
 });
 // Middleware for handling multiple payment screenshot uploads
-export const uploadPaymentScreenshots = upload.fields([
-    { name: 'processingFee', maxCount: 1 },
-    { name: 'bankTransactionPaperFee', maxCount: 1 },
-    { name: 'insuranceFee', maxCount: 1 },
-    { name: 'cibilFee', maxCount: 1 },
-    { name: 'tdsFee', maxCount: 1 },
-    { name: 'nocFee', maxCount: 1 },
-]);
+// export const uploadPaymentScreenshots = upload.fields([
+//     { name: 'processingFee', maxCount: 1 },
+//     { name: 'bankTransactionPaperFee', maxCount: 1 },
+//     { name: 'insuranceFee', maxCount: 1 },
+//     { name: 'cibilFee', maxCount: 1 },
+//     { name: 'tdsFee', maxCount: 1 },
+//     { name: 'nocFee', maxCount: 1 },
+// ]);
 export default upload;
 //# sourceMappingURL=multer.middleware.js.map

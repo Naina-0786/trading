@@ -7,7 +7,7 @@ const investmentRoutes = Router();
 investmentRoutes.post('/create', investmentController.createInvestment);
 
 // Get all investments
-investmentRoutes.get('/all', investmentController.getAllInvestments);
+  investmentRoutes.get('/all', investmentController.getAllInvestments);
 
 // Routes for a specific investment by ID
 investmentRoutes.route('/:id')

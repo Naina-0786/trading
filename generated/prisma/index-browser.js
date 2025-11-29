@@ -163,6 +163,7 @@ exports.Prisma.InvestmentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   planId: 'planId',
+  transactionId: 'transactionId',
   amountInvested: 'amountInvested',
   roiPercentage: 'roiPercentage',
   startDate: 'startDate',
@@ -258,6 +259,14 @@ exports.Prisma.AdminScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.QrCodeScalarFieldEnum = {
+  id: 'id',
+  qrCodeUrl: 'qrCodeUrl',
+  wallentaddress: 'wallentaddress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -299,7 +308,8 @@ exports.Prisma.SubscriptionPlanOrderByRelevanceFieldEnum = {
 exports.Prisma.InvestmentOrderByRelevanceFieldEnum = {
   id: 'id',
   userId: 'userId',
-  planId: 'planId'
+  planId: 'planId',
+  transactionId: 'transactionId'
 };
 
 exports.Prisma.ReferralOrderByRelevanceFieldEnum = {
@@ -364,10 +374,17 @@ exports.Prisma.adminOrderByRelevanceFieldEnum = {
   email: 'email',
   password: 'password'
 };
+
+exports.Prisma.QrCodeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  wallentaddress: 'wallentaddress'
+};
 exports.InvestmentStatus = exports.$Enums.InvestmentStatus = {
+  PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ReferralStatus = exports.$Enums.ReferralStatus = {
@@ -426,7 +443,8 @@ exports.Prisma.ModelName = {
   ROIRecord: 'ROIRecord',
   Setting: 'Setting',
   SupportTicket: 'SupportTicket',
-  admin: 'admin'
+  admin: 'admin',
+  QrCode: 'QrCode'
 };
 
 /**
