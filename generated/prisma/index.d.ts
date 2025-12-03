@@ -4531,12 +4531,14 @@ export namespace Prisma {
   export type SubscriptionPlanAvgAggregateOutputType = {
     minimumInvestment: Decimal | null
     roiPerMonth: Decimal | null
+    roiPerDay: Decimal | null
     durationInMonths: number | null
   }
 
   export type SubscriptionPlanSumAggregateOutputType = {
     minimumInvestment: Decimal | null
     roiPerMonth: Decimal | null
+    roiPerDay: Decimal | null
     durationInMonths: number | null
   }
 
@@ -4545,6 +4547,7 @@ export namespace Prisma {
     name: string | null
     minimumInvestment: Decimal | null
     roiPerMonth: Decimal | null
+    roiPerDay: Decimal | null
     durationInMonths: number | null
     description: string | null
     isActive: boolean | null
@@ -4557,6 +4560,7 @@ export namespace Prisma {
     name: string | null
     minimumInvestment: Decimal | null
     roiPerMonth: Decimal | null
+    roiPerDay: Decimal | null
     durationInMonths: number | null
     description: string | null
     isActive: boolean | null
@@ -4569,6 +4573,7 @@ export namespace Prisma {
     name: number
     minimumInvestment: number
     roiPerMonth: number
+    roiPerDay: number
     durationInMonths: number
     description: number
     isActive: number
@@ -4581,12 +4586,14 @@ export namespace Prisma {
   export type SubscriptionPlanAvgAggregateInputType = {
     minimumInvestment?: true
     roiPerMonth?: true
+    roiPerDay?: true
     durationInMonths?: true
   }
 
   export type SubscriptionPlanSumAggregateInputType = {
     minimumInvestment?: true
     roiPerMonth?: true
+    roiPerDay?: true
     durationInMonths?: true
   }
 
@@ -4595,6 +4602,7 @@ export namespace Prisma {
     name?: true
     minimumInvestment?: true
     roiPerMonth?: true
+    roiPerDay?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4607,6 +4615,7 @@ export namespace Prisma {
     name?: true
     minimumInvestment?: true
     roiPerMonth?: true
+    roiPerDay?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4619,6 +4628,7 @@ export namespace Prisma {
     name?: true
     minimumInvestment?: true
     roiPerMonth?: true
+    roiPerDay?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4717,7 +4727,8 @@ export namespace Prisma {
     id: string
     name: string
     minimumInvestment: Decimal
-    roiPerMonth: Decimal
+    roiPerMonth: Decimal | null
+    roiPerDay: Decimal | null
     durationInMonths: number
     description: string | null
     isActive: boolean
@@ -4749,6 +4760,7 @@ export namespace Prisma {
     name?: boolean
     minimumInvestment?: boolean
     roiPerMonth?: boolean
+    roiPerDay?: boolean
     durationInMonths?: boolean
     description?: boolean
     isActive?: boolean
@@ -4765,6 +4777,7 @@ export namespace Prisma {
     name?: boolean
     minimumInvestment?: boolean
     roiPerMonth?: boolean
+    roiPerDay?: boolean
     durationInMonths?: boolean
     description?: boolean
     isActive?: boolean
@@ -4772,7 +4785,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "roiPerMonth" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
+  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "roiPerMonth" | "roiPerDay" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
   export type SubscriptionPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     investments?: boolean | SubscriptionPlan$investmentsArgs<ExtArgs>
     _count?: boolean | SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -4787,7 +4800,8 @@ export namespace Prisma {
       id: string
       name: string
       minimumInvestment: Prisma.Decimal
-      roiPerMonth: Prisma.Decimal
+      roiPerMonth: Prisma.Decimal | null
+      roiPerDay: Prisma.Decimal | null
       durationInMonths: number
       description: string | null
       isActive: boolean
@@ -5167,6 +5181,7 @@ export namespace Prisma {
     readonly name: FieldRef<"SubscriptionPlan", 'String'>
     readonly minimumInvestment: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly roiPerMonth: FieldRef<"SubscriptionPlan", 'Decimal'>
+    readonly roiPerDay: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly durationInMonths: FieldRef<"SubscriptionPlan", 'Int'>
     readonly description: FieldRef<"SubscriptionPlan", 'String'>
     readonly isActive: FieldRef<"SubscriptionPlan", 'Boolean'>
@@ -11752,6 +11767,8 @@ export namespace Prisma {
     id: string | null
     phoneNumber: string | null
     email: string | null
+    activeUser: string | null
+    totalUser: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11760,6 +11777,8 @@ export namespace Prisma {
     id: string | null
     phoneNumber: string | null
     email: string | null
+    activeUser: string | null
+    totalUser: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11768,6 +11787,8 @@ export namespace Prisma {
     id: number
     phoneNumber: number
     email: number
+    activeUser: number
+    totalUser: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11778,6 +11799,8 @@ export namespace Prisma {
     id?: true
     phoneNumber?: true
     email?: true
+    activeUser?: true
+    totalUser?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11786,6 +11809,8 @@ export namespace Prisma {
     id?: true
     phoneNumber?: true
     email?: true
+    activeUser?: true
+    totalUser?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11794,6 +11819,8 @@ export namespace Prisma {
     id?: true
     phoneNumber?: true
     email?: true
+    activeUser?: true
+    totalUser?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11873,8 +11900,10 @@ export namespace Prisma {
 
   export type SettingGroupByOutputType = {
     id: string
-    phoneNumber: string
-    email: string
+    phoneNumber: string | null
+    email: string | null
+    activeUser: string | null
+    totalUser: string | null
     createdAt: Date
     updatedAt: Date
     _count: SettingCountAggregateOutputType | null
@@ -11900,6 +11929,8 @@ export namespace Prisma {
     id?: boolean
     phoneNumber?: boolean
     email?: boolean
+    activeUser?: boolean
+    totalUser?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["setting"]>
@@ -11910,19 +11941,23 @@ export namespace Prisma {
     id?: boolean
     phoneNumber?: boolean
     email?: boolean
+    activeUser?: boolean
+    totalUser?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
+  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "activeUser" | "totalUser" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
 
   export type $SettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Setting"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      phoneNumber: string
-      email: string
+      phoneNumber: string | null
+      email: string | null
+      activeUser: string | null
+      totalUser: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["setting"]>
@@ -12297,6 +12332,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Setting", 'String'>
     readonly phoneNumber: FieldRef<"Setting", 'String'>
     readonly email: FieldRef<"Setting", 'String'>
+    readonly activeUser: FieldRef<"Setting", 'String'>
+    readonly totalUser: FieldRef<"Setting", 'String'>
     readonly createdAt: FieldRef<"Setting", 'DateTime'>
     readonly updatedAt: FieldRef<"Setting", 'DateTime'>
   }
@@ -15393,6 +15430,7 @@ export namespace Prisma {
     name: 'name',
     minimumInvestment: 'minimumInvestment',
     roiPerMonth: 'roiPerMonth',
+    roiPerDay: 'roiPerDay',
     durationInMonths: 'durationInMonths',
     description: 'description',
     isActive: 'isActive',
@@ -15498,6 +15536,8 @@ export namespace Prisma {
     id: 'id',
     phoneNumber: 'phoneNumber',
     email: 'email',
+    activeUser: 'activeUser',
+    totalUser: 'totalUser',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15675,7 +15715,9 @@ export namespace Prisma {
   export const SettingOrderByRelevanceFieldEnum: {
     id: 'id',
     phoneNumber: 'phoneNumber',
-    email: 'email'
+    email: 'email',
+    activeUser: 'activeUser',
+    totalUser: 'totalUser'
   };
 
   export type SettingOrderByRelevanceFieldEnum = (typeof SettingOrderByRelevanceFieldEnum)[keyof typeof SettingOrderByRelevanceFieldEnum]
@@ -16035,7 +16077,8 @@ export namespace Prisma {
     id?: StringFilter<"SubscriptionPlan"> | string
     name?: StringFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
     description?: StringNullableFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolFilter<"SubscriptionPlan"> | boolean
@@ -16048,7 +16091,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
-    roiPerMonth?: SortOrder
+    roiPerMonth?: SortOrderInput | SortOrder
+    roiPerDay?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -16065,7 +16109,8 @@ export namespace Prisma {
     NOT?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
     name?: StringFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
     description?: StringNullableFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolFilter<"SubscriptionPlan"> | boolean
@@ -16078,7 +16123,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
-    roiPerMonth?: SortOrder
+    roiPerMonth?: SortOrderInput | SortOrder
+    roiPerDay?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -16098,7 +16144,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
     name?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntWithAggregatesFilter<"SubscriptionPlan"> | number
     description?: StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolWithAggregatesFilter<"SubscriptionPlan"> | boolean
@@ -16605,16 +16652,20 @@ export namespace Prisma {
     OR?: SettingWhereInput[]
     NOT?: SettingWhereInput | SettingWhereInput[]
     id?: StringFilter<"Setting"> | string
-    phoneNumber?: StringFilter<"Setting"> | string
-    email?: StringFilter<"Setting"> | string
+    phoneNumber?: StringNullableFilter<"Setting"> | string | null
+    email?: StringNullableFilter<"Setting"> | string | null
+    activeUser?: StringNullableFilter<"Setting"> | string | null
+    totalUser?: StringNullableFilter<"Setting"> | string | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
   }
 
   export type SettingOrderByWithRelationInput = {
     id?: SortOrder
-    phoneNumber?: SortOrder
-    email?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    activeUser?: SortOrderInput | SortOrder
+    totalUser?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _relevance?: SettingOrderByRelevanceInput
@@ -16622,19 +16673,23 @@ export namespace Prisma {
 
   export type SettingWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    email?: string
     AND?: SettingWhereInput | SettingWhereInput[]
     OR?: SettingWhereInput[]
     NOT?: SettingWhereInput | SettingWhereInput[]
-    phoneNumber?: StringFilter<"Setting"> | string
+    phoneNumber?: StringNullableFilter<"Setting"> | string | null
+    email?: StringNullableFilter<"Setting"> | string | null
+    activeUser?: StringNullableFilter<"Setting"> | string | null
+    totalUser?: StringNullableFilter<"Setting"> | string | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
-  }, "id" | "email">
+  }, "id">
 
   export type SettingOrderByWithAggregationInput = {
     id?: SortOrder
-    phoneNumber?: SortOrder
-    email?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    activeUser?: SortOrderInput | SortOrder
+    totalUser?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SettingCountOrderByAggregateInput
@@ -16647,8 +16702,10 @@ export namespace Prisma {
     OR?: SettingScalarWhereWithAggregatesInput[]
     NOT?: SettingScalarWhereWithAggregatesInput | SettingScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Setting"> | string
-    phoneNumber?: StringWithAggregatesFilter<"Setting"> | string
-    email?: StringWithAggregatesFilter<"Setting"> | string
+    phoneNumber?: StringNullableWithAggregatesFilter<"Setting"> | string | null
+    email?: StringNullableWithAggregatesFilter<"Setting"> | string | null
+    activeUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
+    totalUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
   }
@@ -17058,7 +17115,8 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
-    roiPerMonth: Decimal | DecimalJsLike | number | string
+    roiPerMonth?: Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -17071,7 +17129,8 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
-    roiPerMonth: Decimal | DecimalJsLike | number | string
+    roiPerMonth?: Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -17084,7 +17143,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17097,7 +17157,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17110,7 +17171,8 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
-    roiPerMonth: Decimal | DecimalJsLike | number | string
+    roiPerMonth?: Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -17122,7 +17184,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17134,7 +17197,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17652,56 +17716,70 @@ export namespace Prisma {
 
   export type SettingCreateInput = {
     id?: string
-    phoneNumber: string
-    email: string
+    phoneNumber?: string | null
+    email?: string | null
+    activeUser?: string | null
+    totalUser?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type SettingUncheckedCreateInput = {
     id?: string
-    phoneNumber: string
-    email: string
+    phoneNumber?: string | null
+    email?: string | null
+    activeUser?: string | null
+    totalUser?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type SettingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    activeUser?: NullableStringFieldUpdateOperationsInput | string | null
+    totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SettingUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    activeUser?: NullableStringFieldUpdateOperationsInput | string | null
+    totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SettingCreateManyInput = {
     id?: string
-    phoneNumber: string
-    email: string
+    phoneNumber?: string | null
+    email?: string | null
+    activeUser?: string | null
+    totalUser?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type SettingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    activeUser?: NullableStringFieldUpdateOperationsInput | string | null
+    totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SettingUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    activeUser?: NullableStringFieldUpdateOperationsInput | string | null
+    totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18257,6 +18335,17 @@ export namespace Prisma {
     balance?: SortOrder
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -18273,6 +18362,7 @@ export namespace Prisma {
     name?: SortOrder
     minimumInvestment?: SortOrder
     roiPerMonth?: SortOrder
+    roiPerDay?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -18283,6 +18373,7 @@ export namespace Prisma {
   export type SubscriptionPlanAvgOrderByAggregateInput = {
     minimumInvestment?: SortOrder
     roiPerMonth?: SortOrder
+    roiPerDay?: SortOrder
     durationInMonths?: SortOrder
   }
 
@@ -18291,6 +18382,7 @@ export namespace Prisma {
     name?: SortOrder
     minimumInvestment?: SortOrder
     roiPerMonth?: SortOrder
+    roiPerDay?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -18303,6 +18395,7 @@ export namespace Prisma {
     name?: SortOrder
     minimumInvestment?: SortOrder
     roiPerMonth?: SortOrder
+    roiPerDay?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -18313,7 +18406,24 @@ export namespace Prisma {
   export type SubscriptionPlanSumOrderByAggregateInput = {
     minimumInvestment?: SortOrder
     roiPerMonth?: SortOrder
+    roiPerDay?: SortOrder
     durationInMonths?: SortOrder
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -18340,17 +18450,6 @@ export namespace Prisma {
     in?: $Enums.InvestmentStatus[]
     notIn?: $Enums.InvestmentStatus[]
     not?: NestedEnumInvestmentStatusFilter<$PrismaModel> | $Enums.InvestmentStatus
-  }
-
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type SubscriptionPlanScalarRelationFilter = {
@@ -18443,22 +18542,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInvestmentStatusFilter<$PrismaModel>
     _max?: NestedEnumInvestmentStatusFilter<$PrismaModel>
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type EnumReferralStatusFilter<$PrismaModel = never> = {
@@ -18856,6 +18939,8 @@ export namespace Prisma {
     id?: SortOrder
     phoneNumber?: SortOrder
     email?: SortOrder
+    activeUser?: SortOrder
+    totalUser?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18864,6 +18949,8 @@ export namespace Prisma {
     id?: SortOrder
     phoneNumber?: SortOrder
     email?: SortOrder
+    activeUser?: SortOrder
+    totalUser?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18872,6 +18959,8 @@ export namespace Prisma {
     id?: SortOrder
     phoneNumber?: SortOrder
     email?: SortOrder
+    activeUser?: SortOrder
+    totalUser?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19531,6 +19620,14 @@ export namespace Prisma {
     connect?: InvestmentWhereUniqueInput | InvestmentWhereUniqueInput[]
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -19609,14 +19706,6 @@ export namespace Prisma {
 
   export type EnumInvestmentStatusFieldUpdateOperationsInput = {
     set?: $Enums.InvestmentStatus
-  }
-
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type UserUpdateOneRequiredWithoutInvestmentsNestedInput = {
@@ -20030,9 +20119,36 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -20061,17 +20177,6 @@ export namespace Prisma {
     not?: NestedEnumInvestmentStatusFilter<$PrismaModel> | $Enums.InvestmentStatus
   }
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -20094,22 +20199,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInvestmentStatusFilter<$PrismaModel>
     _max?: NestedEnumInvestmentStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReferralStatusFilter<$PrismaModel = never> = {
@@ -21300,7 +21389,8 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
-    roiPerMonth: Decimal | DecimalJsLike | number | string
+    roiPerMonth?: Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -21312,7 +21402,8 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
-    roiPerMonth: Decimal | DecimalJsLike | number | string
+    roiPerMonth?: Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -21465,7 +21556,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -21477,7 +21569,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roiPerMonth?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean

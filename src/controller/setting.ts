@@ -1,203 +1,42 @@
+// import prisma from "../config/prisma.js";
+// import { asyncHandler } from "../middleware/error.middleware.js";
+// import { ErrorResponse } from "../utils/response.util.js";
 
+// const updateSetting = asyncHandler(async (req, res, next) => {
+//   const { phoneNumber, email, activeUser, totalUser } = req.body;
 
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+//   if (!email && !phoneNumber && !activeUser && !totalUser) {
+//     return next(new ErrorResponse("At least one field is required", 400));
+//   }
 
-// Get all settings
-const getAllSettings = async (req:any, res:any) => {
-try {
-    const settings = await prisma.setting.findMany({
-    orderBy: { createdAt: 'desc' },
-    });
-    res.status(200).json({
-    success: true,
-    data: settings,
-    });
-} catch (error:any) {
-    console.error('Error fetching settings:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to fetch settings',
-    error: error.message,
-    });
-}
-};
+//   const settingConfig = await prisma.setting.findFirst({});
 
-// Get a single setting by ID
-const getSettingById = async (req:any, res:any) => {
-try {
-    const { id } = req.params;
-    const setting = await prisma.setting.findUnique({
-    where: { id },
-    });
-    if (!setting) {
-    return res.status(404).json({
-        success: false,
-        message: 'Setting not found',
-    });
-    }
-    res.status(200).json({
-    success: true,
-    data: setting,
-    });
-} catch (error:any) {
-    console.error('Error fetching setting:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to fetch setting',
-    error: error.message,
-    });
-}
-};
+//   let updatedSetting;
+//   if (settingConfig) {
+//     updatedSetting = await prisma.setting.update({
+//       where: { id: settingConfig.id },
+//       data: {
+//         phoneNumber,
+//         email,
+//         activeUser,
+//         totalUser,
+//       },
+//     });
+//   } else {
+//     updatedSetting = await prisma.setting.create({
+//       data: {
+//         phoneNumber,
+//         email,
+//         activeUser,
+//         totalUser,
+//       },
+//     });
+//   }
 
-// Get a single setting by email
-const getSettingByEmail = async (req:any, res:any) => {
-try {
-    const { email } = req.params;
-    const setting = await prisma.setting.findUnique({
-    where: { email },
-    });
-    if (!setting) {
-    return res.status(404).json({
-        success: false,
-        message: 'Setting not found',
-    });
-    }
-    res.status(200).json({
-    success: true,
-    data: setting,
-    });
-} catch (error:any) {
-    console.error('Error fetching setting by email:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to fetch setting',
-    error: error.message,
-    });
-}
-};
+//   res.status(updatedSetting.id ? 200 : 201).json({
+//     success: true,
+//     data: updatedSetting,
+//   });
+// });
 
-// Create a new setting
-const createSetting = async (req:any, res:any) => {
-try {
-    const { phoneNumber, email } = req.body;
-    if (!phoneNumber || !email) {
-    return res.status(400).json({
-        success: false,
-        message: 'phoneNumber and email are required',
-    });
-    }
-    const existingSetting = await prisma.setting.findUnique({
-    where: { email },
-    });
-    if (existingSetting) {
-    return res.status(409).json({
-        success: false,
-        message: 'A setting with this email already exists',
-    });
-    }
-    const setting = await prisma.setting.create({
-    data: {
-        phoneNumber,
-        email,
-    },
-    });
-    res.status(201).json({
-    success: true,
-    data: setting,
-    });
-} catch (error:any) {
-    console.error('Error creating setting:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to create setting',
-    error: error.message,
-    });
-}
-};
-
-// Update a setting
-const updateSetting = async (req:any, res:any) => {
-try {
-    const { id } = req.params;
-    const { phoneNumber, email } = req.body;
-    const existingSetting = await prisma.setting.findUnique({
-    where: { id },
-    });
-    if (!existingSetting) {
-    return res.status(404).json({
-        success: false,
-        message: 'Setting not found',
-    });
-    }
-    // Check for email uniqueness if provided
-    if (email && email !== existingSetting.email) {
-    const emailExists = await prisma.setting.findUnique({
-        where: { email },
-    });
-    if (emailExists) {
-        return res.status(409).json({
-        success: false,
-        message: 'A setting with this email already exists',
-        });
-    }
-    }
-    const setting = await prisma.setting.update({
-    where: { id },
-    data: {
-        phoneNumber,
-        email,
-    },
-    });
-    res.status(200).json({
-    success: true,
-    data: setting,
-    });
-} catch (error:any) {
-    console.error('Error updating setting:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to update setting',
-error: error.message,
-    });
-}
-};
-
-// Delete a setting
-const deleteSetting = async (req:any, res:any) => {
-try {
-    const { id } = req.params;
-    const setting = await prisma.setting.findUnique({
-    where: { id },
-    });
-    if (!setting) {
-    return res.status(404).json({
-        success: false,
-        message: 'Setting not found',
-    });
-    }
-    await prisma.setting.delete({
-    where: { id },
-    });
-    res.status(200).json({
-    success: true,
-    message: 'Setting deleted successfully',
-    });
-} catch (error:any) {
-    console.error('Error deleting setting:', error);
-    res.status(500).json({
-    success: false,
-    message: 'Failed to delete setting',
-    error: error.message,
-    });
-}
-};
-
-module.exports = {
-getAllSettings,
-getSettingById,
-getSettingByEmail,
-createSetting,
-updateSetting,
-deleteSetting,
-};
+// export default  updateSetting

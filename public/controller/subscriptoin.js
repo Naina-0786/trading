@@ -4,17 +4,44 @@ export const subscriptionPlanController = {
     // Create a new subscription plan
     async createSubscriptionPlan(req, res) {
         try {
-            const { name, minimumInvestment, roiPerMonth, durationInMonths, description, isActive } = req.body;
+            const { name, minimumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
             // Validate required fields
-            if (!name || minimumInvestment === undefined || roiPerMonth === undefined || durationInMonths === undefined) {
+            if (!name || minimumInvestment === undefined || durationInMonths === undefined) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'name, minimumInvestment, roiPerMonth, and durationInMonths are required',
+                    error: 'name, minimumInvestment, and durationInMonths are required',
+                });
+            }
+            // Validate that only one of roiPerMonth or roiPerDay is provided
+            if (roiPerMonth !== undefined && roiPerDay !== undefined) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'Only one of roiPerMonth or roiPerDay should be provided, not both',
+                });
+            }
+            // Validate at least one of roiPerMonth or roiPerDay is provided
+            if (roiPerMonth === undefined && roiPerDay === undefined) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'At least one of roiPerMonth or roiPerDay must be provided',
                 });
             }
             // Validate numeric fields
-            if (minimumInvestment < 0 || roiPerMonth < 0 || durationInMonths <= 0) {
+            if (minimumInvestment < 0) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'minimumInvestment and roiPerMonth must be non-negative, and durationInMonths must be positive',
+                    error: 'minimumInvestment must be non-negative',
+                });
+            }
+            if (roiPerMonth !== undefined && roiPerMonth < 0) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'roiPerMonth must be non-negative',
+                });
+            }
+            if (roiPerDay !== undefined && roiPerDay < 0) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'roiPerDay must be non-negative',
+                });
+            }
+            if (durationInMonths <= 0) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'durationInMonths must be positive',
                 });
             }
             // Create subscription plan
@@ -23,6 +50,7 @@ export const subscriptionPlanController = {
                     name,
                     minimumInvestment,
                     roiPerMonth,
+                    roiPerDay,
                     durationInMonths,
                     description,
                     isActive: isActive !== undefined ? isActive : true,
@@ -32,6 +60,7 @@ export const subscriptionPlanController = {
                     name: true,
                     minimumInvestment: true,
                     roiPerMonth: true,
+                    roiPerDay: true,
                     durationInMonths: true,
                     description: true,
                     isActive: true,
@@ -95,6 +124,7 @@ export const subscriptionPlanController = {
                     name: true,
                     minimumInvestment: true,
                     roiPerMonth: true,
+                    roiPerDay: true,
                     durationInMonths: true,
                     description: true,
                     isActive: true,
@@ -117,12 +147,18 @@ export const subscriptionPlanController = {
     async updateSubscriptionPlan(req, res) {
         try {
             const id = req.params.id;
-            const { name, minimumInvestment, roiPerMonth, durationInMonths, description, isActive } = req.body;
+            const { name, minimumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
             // Check if subscription plan exists
             const subscriptionPlan = await prisma.subscriptionPlan.findUnique({ where: { id } });
             if (!subscriptionPlan) {
                 return res.status(StatusCodes.NOT_FOUND).json({
                     error: 'Subscription plan not found',
+                });
+            }
+            // Validate that only one of roiPerMonth or roiPerDay is provided if both are being updated
+            if (roiPerMonth !== undefined && roiPerDay !== undefined) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'Only one of roiPerMonth or roiPerDay should be provided, not both',
                 });
             }
             // Check for active investments if setting isActive to false
@@ -144,6 +180,8 @@ export const subscriptionPlanController = {
                 updateData.minimumInvestment = minimumInvestment;
             if (roiPerMonth !== undefined)
                 updateData.roiPerMonth = roiPerMonth;
+            if (roiPerDay !== undefined)
+                updateData.roiPerDay = roiPerDay;
             if (durationInMonths !== undefined)
                 updateData.durationInMonths = durationInMonths;
             if (description !== undefined)
@@ -161,6 +199,11 @@ export const subscriptionPlanController = {
                     error: 'roiPerMonth must be non-negative',
                 });
             }
+            if (roiPerDay !== undefined && roiPerDay < 0) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'roiPerDay must be non-negative',
+                });
+            }
             if (durationInMonths !== undefined && durationInMonths <= 0) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
                     error: 'durationInMonths must be positive',
@@ -175,6 +218,7 @@ export const subscriptionPlanController = {
                     name: true,
                     minimumInvestment: true,
                     roiPerMonth: true,
+                    roiPerDay: true,
                     durationInMonths: true,
                     description: true,
                     isActive: true,
@@ -233,6 +277,10 @@ export const subscriptionPlanController = {
                 select: {
                     id: true,
                     name: true,
+                    minimumInvestment: true,
+                    roiPerMonth: true,
+                    roiPerDay: true,
+                    durationInMonths: true,
                     investments: {
                         select: {
                             id: true,

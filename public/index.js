@@ -12,23 +12,23 @@ import walletRoutes from "./routes/wallet.routes.js";
 import withdrawalRoutes from "./routes/withdraw.routes.js";
 import cors from "cors";
 import adminRoutes from "./routes/admin.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import qrRoutes from "./routes/qr.routes.js";
-import { corsMiddleware } from "./middleware/cors.js";
+import routers from "./routes/active.routes.js";
 const app = express();
-app.use(corsMiddleware);
-// app.use(cors({
-//   origin: [
-//     "http://localhost:8080",
-//     "http://localhost:8081",
-//     "https://www.expotradex.com",
-//     "https://expo-trading-admin.vercel.app"
-//   ],
-//   credentials: true,
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   exposedHeaders: ["Authorization"]
-// }));
+app.use(cors({
+    origin: [
+        "http://localhost:8080",
+        "http://localhost:8081",
+        "https://www.expotradex.com",
+        "https://expo-trading-admin.vercel.app"
+    ],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    exposedHeaders: ["Authorization"]
+}));
 app.use(express.json({
 // verify: (req: any, res: any, buf: any) => {
 //   const url = (req as any).originalUrl;
@@ -53,10 +53,11 @@ app.use('/api/transaction', transactionRoutes);
 app.use('/api/transfer', transferRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/payment/webhook', paymentRoutes);
-// app.use('/api/settings', settingsRoutes)0;
 app.use('/api/support-tickets', support);
 app.use("/api/admin", adminRoutes);
 app.use('/api/qr-code', qrRoutes);
+app.use('/api/dashboardRoutes', dashboardRoutes);
+app.use('/api/setting', routers);
 app.use(errorMiddleware);
 app.listen(4000, () => {
     console.log("Server is running on port 4000");

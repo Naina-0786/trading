@@ -152,6 +152,7 @@ exports.Prisma.SubscriptionPlanScalarFieldEnum = {
   name: 'name',
   minimumInvestment: 'minimumInvestment',
   roiPerMonth: 'roiPerMonth',
+  roiPerDay: 'roiPerDay',
   durationInMonths: 'durationInMonths',
   description: 'description',
   isActive: 'isActive',
@@ -236,6 +237,8 @@ exports.Prisma.SettingScalarFieldEnum = {
   id: 'id',
   phoneNumber: 'phoneNumber',
   email: 'email',
+  activeUser: 'activeUser',
+  totalUser: 'totalUser',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -359,7 +362,9 @@ exports.Prisma.ROIRecordOrderByRelevanceFieldEnum = {
 exports.Prisma.SettingOrderByRelevanceFieldEnum = {
   id: 'id',
   phoneNumber: 'phoneNumber',
-  email: 'email'
+  email: 'email',
+  activeUser: 'activeUser',
+  totalUser: 'totalUser'
 };
 
 exports.Prisma.SupportTicketOrderByRelevanceFieldEnum = {
