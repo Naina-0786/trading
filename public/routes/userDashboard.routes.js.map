@@ -1,0 +1,1 @@
+{"version":3,"file":"userDashboard.routes.js","sourceRoot":"","sources":["../../src/routes/userDashboard.routes.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,SAAS,CAAC;AACjC,OAAO,EAAE,gBAAgB,EAAE,MAAM,gCAAgC,CAAC;AAElE,MAAM,CAAC,MAAM,kBAAkB,GAAG,MAAM,EAAE,CAAC;AAE3C,kBAAkB,CAAC,GAAG,CAAC,MAAM,EAAE,gBAAgB,CAAC,CAAA;AAEhD,eAAe,kBAAkB,CAAC"}

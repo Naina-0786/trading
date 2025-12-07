@@ -18,6 +18,7 @@ export const investmentController = {
         roiPercentage,
         startDate,
         endDate,
+        transactionId,
       } = req.body;
 
       // Validate required fields
@@ -26,11 +27,12 @@ export const investmentController = {
         !planId ||
         amountInvested === undefined ||
         roiPercentage === undefined ||
-        !startDate
+        !startDate ||
+        !transactionId
       ) {
         return res.status(StatusCodes.BAD_REQUEST).json({
           error:
-            "userId, planId, amountInvested, roiPercentage, and startDate are required",
+            "userId, planId, amountInvested, roiPercentage, startDate, and transactionId are required",
         });
       }
 
@@ -79,9 +81,10 @@ export const investmentController = {
           planId: planId as string,
           amountInvested: new Prisma.Decimal(amountInvested as number),
           roiPercentage: new Prisma.Decimal(roiPercentage as number),
+          transactionId: transactionId as string,
           startDate: new Date(startDate),
           endDate: endDate ? new Date(endDate) : null,
-          status: InvestmentStatus.ACTIVE,
+          status: InvestmentStatus.PENDING,
           totalReturn: null, // Will be updated later based on ROI calculations
         } as Prisma.InvestmentUncheckedCreateInput,
         include: {

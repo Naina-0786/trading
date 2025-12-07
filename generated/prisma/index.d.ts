@@ -4530,6 +4530,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanAvgAggregateOutputType = {
     minimumInvestment: Decimal | null
+    maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
     durationInMonths: number | null
@@ -4537,6 +4538,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanSumAggregateOutputType = {
     minimumInvestment: Decimal | null
+    maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
     durationInMonths: number | null
@@ -4546,6 +4548,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     minimumInvestment: Decimal | null
+    maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
     durationInMonths: number | null
@@ -4559,6 +4562,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     minimumInvestment: Decimal | null
+    maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
     durationInMonths: number | null
@@ -4572,6 +4576,7 @@ export namespace Prisma {
     id: number
     name: number
     minimumInvestment: number
+    maximumInvestment: number
     roiPerMonth: number
     roiPerDay: number
     durationInMonths: number
@@ -4585,6 +4590,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanAvgAggregateInputType = {
     minimumInvestment?: true
+    maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
     durationInMonths?: true
@@ -4592,6 +4598,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanSumAggregateInputType = {
     minimumInvestment?: true
+    maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
     durationInMonths?: true
@@ -4601,6 +4608,7 @@ export namespace Prisma {
     id?: true
     name?: true
     minimumInvestment?: true
+    maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
     durationInMonths?: true
@@ -4614,6 +4622,7 @@ export namespace Prisma {
     id?: true
     name?: true
     minimumInvestment?: true
+    maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
     durationInMonths?: true
@@ -4627,6 +4636,7 @@ export namespace Prisma {
     id?: true
     name?: true
     minimumInvestment?: true
+    maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
     durationInMonths?: true
@@ -4727,6 +4737,7 @@ export namespace Prisma {
     id: string
     name: string
     minimumInvestment: Decimal
+    maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
     durationInMonths: number
@@ -4759,6 +4770,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     minimumInvestment?: boolean
+    maximumInvestment?: boolean
     roiPerMonth?: boolean
     roiPerDay?: boolean
     durationInMonths?: boolean
@@ -4776,6 +4788,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     minimumInvestment?: boolean
+    maximumInvestment?: boolean
     roiPerMonth?: boolean
     roiPerDay?: boolean
     durationInMonths?: boolean
@@ -4785,7 +4798,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "roiPerMonth" | "roiPerDay" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
+  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "maximumInvestment" | "roiPerMonth" | "roiPerDay" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
   export type SubscriptionPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     investments?: boolean | SubscriptionPlan$investmentsArgs<ExtArgs>
     _count?: boolean | SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -4800,6 +4813,7 @@ export namespace Prisma {
       id: string
       name: string
       minimumInvestment: Prisma.Decimal
+      maximumInvestment: Prisma.Decimal | null
       roiPerMonth: Prisma.Decimal | null
       roiPerDay: Prisma.Decimal | null
       durationInMonths: number
@@ -5180,6 +5194,7 @@ export namespace Prisma {
     readonly id: FieldRef<"SubscriptionPlan", 'String'>
     readonly name: FieldRef<"SubscriptionPlan", 'String'>
     readonly minimumInvestment: FieldRef<"SubscriptionPlan", 'Decimal'>
+    readonly maximumInvestment: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly roiPerMonth: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly roiPerDay: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly durationInMonths: FieldRef<"SubscriptionPlan", 'Int'>
@@ -15429,6 +15444,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     minimumInvestment: 'minimumInvestment',
+    maximumInvestment: 'maximumInvestment',
     roiPerMonth: 'roiPerMonth',
     roiPerDay: 'roiPerDay',
     durationInMonths: 'durationInMonths',
@@ -16077,6 +16093,7 @@ export namespace Prisma {
     id?: StringFilter<"SubscriptionPlan"> | string
     name?: StringFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
@@ -16091,6 +16108,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrderInput | SortOrder
     roiPerMonth?: SortOrderInput | SortOrder
     roiPerDay?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
@@ -16109,6 +16127,7 @@ export namespace Prisma {
     NOT?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
     name?: StringFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
@@ -16123,6 +16142,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrderInput | SortOrder
     roiPerMonth?: SortOrderInput | SortOrder
     roiPerDay?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
@@ -16144,6 +16164,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
     name?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
     minimumInvestment?: DecimalWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntWithAggregatesFilter<"SubscriptionPlan"> | number
@@ -17115,6 +17136,7 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
+    maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
@@ -17129,6 +17151,7 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
+    maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
@@ -17143,6 +17166,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
@@ -17157,6 +17181,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
@@ -17171,6 +17196,7 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
+    maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
@@ -17184,6 +17210,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
@@ -17197,6 +17224,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
@@ -18361,6 +18389,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
     durationInMonths?: SortOrder
@@ -18372,6 +18401,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanAvgOrderByAggregateInput = {
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
     durationInMonths?: SortOrder
@@ -18381,6 +18411,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
     durationInMonths?: SortOrder
@@ -18394,6 +18425,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
     durationInMonths?: SortOrder
@@ -18405,6 +18437,7 @@ export namespace Prisma {
 
   export type SubscriptionPlanSumOrderByAggregateInput = {
     minimumInvestment?: SortOrder
+    maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
     durationInMonths?: SortOrder
@@ -21389,6 +21422,7 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
+    maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
@@ -21402,6 +21436,7 @@ export namespace Prisma {
     id?: string
     name: string
     minimumInvestment: Decimal | DecimalJsLike | number | string
+    maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
@@ -21556,6 +21591,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
@@ -21569,6 +21605,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     minimumInvestment?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number

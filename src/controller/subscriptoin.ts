@@ -7,12 +7,12 @@ export const subscriptionPlanController = {
   // Create a new subscription plan
   async createSubscriptionPlan(req: Request, res: Response) {
     try {
-      const { name, minimumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
+      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
 
       // Validate required fields
-      if (!name || minimumInvestment === undefined || durationInMonths === undefined) {
+      if (!name || minimumInvestment === undefined || maximumInvestment === undefined || durationInMonths === undefined) {
         return res.status(StatusCodes.BAD_REQUEST).json({
-          error: 'name, minimumInvestment, and durationInMonths are required',
+          error: 'name, minimumInvestment, maxInvestment and durationInMonths are required',
         });
       }
 
@@ -29,7 +29,11 @@ export const subscriptionPlanController = {
           error: 'At least one of roiPerMonth or roiPerDay must be provided',
         });
       }
-
+      if (maximumInvestment <= minimumInvestment) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          error: 'maximumInvestment must be greater than minimumInvestment',
+        });
+      }
      
 
       // Validate numeric fields
@@ -59,6 +63,7 @@ export const subscriptionPlanController = {
         data: {
           name,
           minimumInvestment,
+          maximumInvestment,
           roiPerMonth,
           roiPerDay,
           durationInMonths,
@@ -69,6 +74,7 @@ export const subscriptionPlanController = {
           id: true,
           name: true,
           minimumInvestment: true,
+          maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
           durationInMonths: true,
@@ -95,6 +101,7 @@ export const subscriptionPlanController = {
   async getSubscriptionPlanById(req: Request, res: Response) {
     try {
       const id  = req.params.id as string;
+      const userId = req.query?.id as string; // May be undefined if not logged in
 
       const subscriptionPlan = await prisma.subscriptionPlan.findUnique({
         where: { id },
@@ -118,8 +125,24 @@ export const subscriptionPlanController = {
         });
       }
 
+      // Check if user has purchased this plan only if logged in
+      let isSubscribed = false;
+      if (userId) {
+        const userInvestment = await prisma.investment.findFirst({
+          where: {
+            userId,
+            planId: id,
+            status: { in: ['ACTIVE', 'COMPLETED'] }, // Assuming purchased means active or completed
+          },
+        });
+        isSubscribed = !!userInvestment;
+      }
+
       return res.status(StatusCodes.OK).json({
-        data: subscriptionPlan,
+        data: {
+          ...subscriptionPlan,
+          isSubscribed,
+        },
       });
     } catch (error) {
       console.error('Error fetching subscription plan:', error);
@@ -132,11 +155,14 @@ export const subscriptionPlanController = {
   // Get all subscription plans
   async getAllSubscriptionPlans(req: Request, res: Response) {
     try {
+      const userId = req.query?.id as string; // May be undefined if not logged in
+
       const subscriptionPlans = await prisma.subscriptionPlan.findMany({
         select: {
           id: true,
           name: true,
           minimumInvestment: true,
+          maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
           durationInMonths: true,
@@ -147,8 +173,29 @@ export const subscriptionPlanController = {
         },
       });
 
+      // Check user's investments to see which plans they have purchased only if logged in
+      let hasAnySubscriptions = false;
+      let userPlanIds = new Set();
+      if (userId) {
+        const userInvestments = await prisma.investment.findMany({
+          where: {
+            userId,
+            status: { in: ['ACTIVE', 'COMPLETED'] }, // Assuming purchased means active or completed
+          },
+          select: { planId: true },
+        });
+        userPlanIds = new Set(userInvestments.map(inv => inv.planId));
+        hasAnySubscriptions = userPlanIds.size > 0;
+      }
+
+      const plansWithUserInfo = subscriptionPlans.map(plan => ({
+        ...plan,
+        isSubscribed: userPlanIds.has(plan.id),
+      }));
+
       return res.status(StatusCodes.OK).json({
-        data: subscriptionPlans,
+        data: plansWithUserInfo,
+        hasAnySubscriptions,
       });
     } catch (error) {
       console.error('Error fetching subscription plans:', error);
@@ -162,7 +209,7 @@ export const subscriptionPlanController = {
   async updateSubscriptionPlan(req: Request, res: Response) {
     try {
       const id  = req.params.id as string;
-      const { name, minimumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
+      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
 
       // Check if subscription plan exists
       const subscriptionPlan = await prisma.subscriptionPlan.findUnique({ where: { id } });
@@ -195,6 +242,7 @@ export const subscriptionPlanController = {
       const updateData: Partial<SubscriptionPlan> = {};
       if (name) updateData.name = name;
       if (minimumInvestment !== undefined) updateData.minimumInvestment = minimumInvestment;
+      if (maximumInvestment !== undefined) updateData.maximumInvestment = maximumInvestment;
       if (roiPerMonth !== undefined) updateData.roiPerMonth = roiPerMonth;
       if (roiPerDay !== undefined) updateData.roiPerDay = roiPerDay;
       if (durationInMonths !== undefined) updateData.durationInMonths = durationInMonths;
@@ -205,6 +253,11 @@ export const subscriptionPlanController = {
       if (minimumInvestment !== undefined && minimumInvestment < 0) {
         return res.status(StatusCodes.BAD_REQUEST).json({
           error: 'minimumInvestment must be non-negative',
+        });
+      }
+      if (maximumInvestment !== undefined && maximumInvestment < 0) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          error: 'maximumInvestment must be non-negative',
         });
       }
       if (roiPerMonth !== undefined && roiPerMonth < 0) {
@@ -231,6 +284,7 @@ export const subscriptionPlanController = {
           id: true,
           name: true,
           minimumInvestment: true,
+          maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
           durationInMonths: true,
@@ -298,6 +352,7 @@ export const subscriptionPlanController = {
           id: true,
           name: true,
           minimumInvestment: true,
+          maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
           durationInMonths: true,

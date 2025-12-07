@@ -151,6 +151,7 @@ exports.Prisma.SubscriptionPlanScalarFieldEnum = {
   id: 'id',
   name: 'name',
   minimumInvestment: 'minimumInvestment',
+  maximumInvestment: 'maximumInvestment',
   roiPerMonth: 'roiPerMonth',
   roiPerDay: 'roiPerDay',
   durationInMonths: 'durationInMonths',

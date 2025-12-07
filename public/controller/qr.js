@@ -46,4 +46,23 @@ export const qrCode = async (req, res) => {
         });
     }
 };
+export const getQrCode = async (req, res) => {
+    try {
+        const qrCode = await prisma.qrCode.findFirst();
+        if (!qrCode) {
+            return res.status(404).json({
+                success: false,
+                message: "QR Code not found",
+            });
+        }
+        SuccessResponse(res, "QR Code fetched successfully", qrCode, 200);
+    }
+    catch (error) {
+        console.error("QR Code controller error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch QR Code: " + error.message,
+        });
+    }
+};
 //# sourceMappingURL=qr.js.map
