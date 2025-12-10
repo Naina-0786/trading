@@ -35,6 +35,16 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
         _sum: { roiAmount: true },
     });
     const monthlyRoiAmount = Number(monthlyRoiAggregate._sum.roiAmount || 0);
+    // Daily ROI: Sum of roiAmount for today
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dailyRoiAggregate = await prisma.rOIRecord.aggregate({
+        where: {
+            userId,
+            createdAt: { gte: startOfDay },
+        },
+        _sum: { roiAmount: true },
+    });
+    const dailyRoiAmount = Number(dailyRoiAggregate._sum.roiAmount || 0);
     // Total ROI: Sum of all roiAmount
     const allRoiAggregate = await prisma.rOIRecord.aggregate({
         where: { userId },
@@ -122,6 +132,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
             totalInvested: totalInvested.toFixed(0),
             currentBalance: currentBalance.toFixed(0),
             monthlyROI: monthlyRoiAmount.toFixed(0),
+            dailyROI: dailyRoiAmount.toFixed(0),
             referralEarnings: Number(user.totalEarnings).toFixed(0),
         },
         charts: {

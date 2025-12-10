@@ -271,6 +271,17 @@ exports.Prisma.QrCodeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  meta: 'meta',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -385,6 +396,12 @@ exports.Prisma.QrCodeOrderByRelevanceFieldEnum = {
   id: 'id',
   wallentaddress: 'wallentaddress'
 };
+
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message'
+};
 exports.InvestmentStatus = exports.$Enums.InvestmentStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
@@ -437,6 +454,15 @@ exports.AdminRole = exports.$Enums.AdminRole = {
   SUPER_ADMIN: 'SUPER_ADMIN'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  INFO: 'INFO',
+  SUCCESS: 'SUCCESS',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR',
+  PROMOTIONAL: 'PROMOTIONAL',
+  SYSTEM: 'SYSTEM'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Wallet: 'Wallet',
@@ -450,7 +476,8 @@ exports.Prisma.ModelName = {
   Setting: 'Setting',
   SupportTicket: 'SupportTicket',
   admin: 'admin',
-  QrCode: 'QrCode'
+  QrCode: 'QrCode',
+  Notification: 'Notification'
 };
 
 /**

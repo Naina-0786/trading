@@ -20,6 +20,7 @@ import qrRoutes from "./routes/qr.routes.js";
 
 import routers from "./routes/active.routes.js";
 import userDashboardRoute from "./routes/userDashboard.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.use('/api/dashboardRoutes',dashboardRoutes);
 app.use('/api/setting', routers);
 
 app.use("/api/user-dashboard", userDashboardRoute)
+app.use("/api/notifications", notificationRoutes);
 
 app.use(errorMiddleware);
 
