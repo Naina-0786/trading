@@ -143,7 +143,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
   });
 
   // Referral Link
-  const referralLink = `https://www.expotradex.com/auth/signup/?ref=${user.referralCode}`;
+  const referralLink = `https://www.expotradex.com/auth/signup/?referralId=${user.referralCode}`;
 
   // Structured Dashboard Data
   const dashboardData = {

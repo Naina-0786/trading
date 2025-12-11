@@ -37,7 +37,7 @@ export const userController = {
       let referralCode: string;
       let existingReferral: any;
       do {
-        referralCode = uuidv4().slice(0, 8);
+        referralCode = `EXPO${uuidv4().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
         existingReferral = await prisma.user.findUnique({
           where: { referralCode },
         });
