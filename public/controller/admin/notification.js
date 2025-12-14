@@ -2,7 +2,7 @@ import prisma from "../../config/prisma.js";
 import { asyncHandler } from "../../middleware/error.middleware.js";
 import { ErrorResponse } from "../../utils/response.util.js";
 export const createNotification = asyncHandler(async (req, res, next) => {
-    const { title, message, type, meta, expiresAt } = req.body;
+    const { title, message, type, meta, expiresAt, userIds } = req.body;
     // Validate required fields
     if (!title || !message || !type) {
         return next(new ErrorResponse("title, message, type are required", 400));
@@ -19,6 +19,11 @@ export const createNotification = asyncHandler(async (req, res, next) => {
             type,
             meta: meta ? JSON.parse(meta) : null, // Parse JSON if stringified
             expiresAt: expiresAt ? new Date(expiresAt) : null,
+            userNotifications: {
+                create: userIds.map((userId) => ({
+                    userId,
+                })),
+            },
         },
     });
     res.status(201).json({

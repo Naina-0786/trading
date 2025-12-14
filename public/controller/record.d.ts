@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 export declare const roiRecordController: {
     createROIRecord(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     getROIRecordById(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'; // For password hashing
 import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid'; // For generating referral codes
-import { ReferralStatus, type User } from '../../generated/prisma/index.js';
+import { Prisma, ReferralStatus, type User } from '../../generated/prisma/index.js';
 import prisma from '../config/prisma.js';
 import { JWT } from '../utils/jwt.utils.js';
 
@@ -185,41 +185,16 @@ export const userController = {
     try {
       const { id } = req.params;
 
+      // Fetch user with investments and related plans
       const user = await prisma.user.findUnique({
         where: { id: id as string },
         include: {
           wallet: true,
-          investments: {
-            include: {
-              plan: true,
-            },
-          },
-          referralsMade: {
-            include: {
-              referredUser: {
-                select: {
-                  id: true,
-                  name: true,
-                  email: true,
-                  referralCode: true,
-                  createdAt: true,
-                },
-              },
-            },
-          },
-          referralsGot: {
-            include: {
-              referrer: {
-                select: {
-                  id: true,
-                  name: true,
-                  email: true,
-                  referralCode: true,
-                },
-              },
-            },
-          },
           referredBy: { select: { id: true, name: true, email: true } },
+          investments: {
+            where: { status: 'ACTIVE' }, // Only active investments for ROI calculation
+            include: { plan: true },
+          },
         },
       });
 
@@ -228,7 +203,117 @@ export const userController = {
           error: 'User not found',
         });
       }
-      
+
+      // Calculate and credit missed ROIs if any active investments
+      if (user.investments.length > 0) {
+        const now = new Date();
+
+        for (const investment of user.investments) {
+          const plan = investment.plan;
+          const amountInvested = Number(investment.amountInvested);
+          const lastRoiRecord = await prisma.rOIRecord.findFirst({
+            where: { investmentId: investment.id },
+            orderBy: { createdAt: 'desc' },
+          });
+          const lastCreditDate = lastRoiRecord ? new Date(lastRoiRecord.createdAt) : new Date(investment.startDate);
+
+          // Determine ROI type and calculate missed periods
+          if (plan.roiPerDay) {
+            // Daily ROI
+            const dailyRoi = amountInvested * Number(plan.roiPerDay);
+            const daysMissed = Math.floor((now.getTime() - lastCreditDate.getTime()) / (1000 * 60 * 60 * 24));
+
+            if (daysMissed > 0) {
+              const totalMissedRoi = dailyRoi * daysMissed;
+
+              // Credit to wallet
+              await prisma.wallet.update({
+                where: { userId: user.id },
+                data: { balance: { increment: new Prisma.Decimal(totalMissedRoi) } },
+              });
+
+              // Create ROI record (aggregate for missed days)
+              await prisma.rOIRecord.create({
+                data: {
+                  userId: user.id,
+                  investmentId: investment.id,
+                  weekNumber: Math.floor(daysMissed / 7) + (lastRoiRecord?.weekNumber || 0), // Approximate week
+                  roiAmount: new Prisma.Decimal(totalMissedRoi),
+                  isReferralBonusApplied: false,
+                },
+              });
+
+              // Create transaction record
+              await prisma.transaction.create({
+                data: {
+                  userId: user.id,
+                  type: 'ROI',
+                  amount: new Prisma.Decimal(totalMissedRoi),
+                  status: 'SUCCESS',
+                  description: `Missed daily ROI credit for ${daysMissed} days on investment ${investment.id}`,
+                  investmentId: investment.id,
+                },
+              });
+            }
+          } else if (plan.roiPerMonth) {
+            // Monthly ROI
+            const monthlyRoi = amountInvested * Number(plan.roiPerMonth);
+            let monthsMissed = 0;
+            let currentDate = new Date(lastCreditDate);
+            while (currentDate < now) {
+              currentDate.setMonth(currentDate.getMonth() + 1);
+              if (currentDate <= now) monthsMissed++;
+            }
+
+            if (monthsMissed > 0) {
+              const totalMissedRoi = monthlyRoi * monthsMissed;
+
+              // Credit to wallet
+              await prisma.wallet.update({
+                where: { userId: user.id },
+                data: { balance: { increment: new Prisma.Decimal(totalMissedRoi) } },
+              });
+
+              // Create ROI record (aggregate for missed months; use weekNumber as placeholder)
+              await prisma.rOIRecord.create({
+                data: {
+                  userId: user.id,
+                  investmentId: investment.id,
+                  weekNumber: monthsMissed * 4 + (lastRoiRecord?.weekNumber || 0), // Approximate (4 weeks/month)
+                  roiAmount: new Prisma.Decimal(totalMissedRoi),
+                  isReferralBonusApplied: false,
+                },
+              });
+
+              // Create transaction record
+              await prisma.transaction.create({
+                data: {
+                  userId: user.id,
+                  type: 'ROI',
+                  amount: new Prisma.Decimal(totalMissedRoi),
+                  status: 'SUCCESS',
+                  description: `Missed monthly ROI credit for ${monthsMissed} months on investment ${investment.id}`,
+                  investmentId: investment.id,
+                },
+              });
+            }
+          }
+        }
+
+        // Refetch user after updates to return fresh data
+        const updatedUser = await prisma.user.findUnique({
+          where: { id: id as string },
+          include: {
+            wallet: true,
+            referredBy: { select: { id: true, name: true, email: true } },
+          },
+        });
+
+        return res.status(StatusCodes.OK).json({
+          data: updatedUser,
+        });
+      }
+
       return res.status(StatusCodes.OK).json({
         data: user,
       });
@@ -343,10 +428,23 @@ async getAllUsers(req: Request, res: Response) {
     try {
       const page = parseInt(req.query.page as string, 10) || 1;
       const limit = parseInt(req.query.limit as string, 10) || 10;
+      const search = req.query.search as string || '';
       const skip = (page - 1) * limit;
+
+      const where: Prisma.UserWhereInput = {}
+
+      if (search) {
+        where.OR = [
+          { name: { contains: search} },
+          { email: { contains: search } },
+          { walletAddress: { contains: search } },
+          { referralCode: { contains: search } },
+        ]
+      }
 
       const [users, total] = await Promise.all([
         prisma.user.findMany({
+          where,
           skip,
           take: limit,
           select: {
@@ -364,7 +462,7 @@ async getAllUsers(req: Request, res: Response) {
           },
           orderBy: { createdAt: 'desc' },
         }),
-        prisma.user.count(),
+        prisma.user.count({ where }),
       ]);
 
       const totalPages = Math.ceil(total / limit);
@@ -377,8 +475,6 @@ async getAllUsers(req: Request, res: Response) {
             totalPages,
             current:page,
             count:users.length
-           
-
           },
         },
       });

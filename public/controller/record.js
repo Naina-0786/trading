@@ -1,46 +1,48 @@
-import { StatusCodes } from 'http-status-codes';
-import prisma from '../config/prisma.js';
+import { StatusCodes } from "http-status-codes";
+import prisma from "../config/prisma.js";
 export const roiRecordController = {
     // Create a new ROI record
     async createROIRecord(req, res) {
         try {
-            const { userId, investmentId, weekNumber, roiAmount, isReferralBonusApplied } = req.body;
+            const { userId, investmentId, weekNumber, roiAmount, isReferralBonusApplied, } = req.body;
             // Validate required fields
             if (!userId || weekNumber === undefined || roiAmount === undefined) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'userId, weekNumber, and roiAmount are required',
+                    error: "userId, weekNumber, and roiAmount are required",
                 });
             }
             // Validate numeric fields
             if (weekNumber < 1) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'weekNumber must be positive',
+                    error: "weekNumber must be positive",
                 });
             }
             if (roiAmount < 0) {
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'roiAmount must be non-negative',
+                    error: "roiAmount must be non-negative",
                 });
             }
             // Check if user exists
             const user = await prisma.user.findUnique({ where: { id: userId } });
             if (!user) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'User not found',
+                    error: "User not found",
                 });
             }
             // Check if investment exists (if provided)
             if (investmentId) {
-                const investment = await prisma.investment.findUnique({ where: { id: investmentId } });
+                const investment = await prisma.investment.findUnique({
+                    where: { id: investmentId },
+                });
                 if (!investment) {
                     return res.status(StatusCodes.NOT_FOUND).json({
-                        error: 'Investment not found',
+                        error: "Investment not found",
                     });
                 }
                 // Ensure investment belongs to the user
                 if (investment.userId !== userId) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'Investment does not belong to the specified user',
+                        error: "Investment does not belong to the specified user",
                     });
                 }
             }
@@ -70,14 +72,14 @@ export const roiRecordController = {
                 });
             }
             return res.status(StatusCodes.CREATED).json({
-                message: 'ROI record created successfully',
+                message: "ROI record created successfully",
                 data: roiRecord,
             });
         }
         catch (error) {
-            console.error('Error creating ROI record:', error);
+            console.error("Error creating ROI record:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to create ROI record',
+                error: "Failed to create ROI record",
             });
         }
     },
@@ -98,7 +100,7 @@ export const roiRecordController = {
             });
             if (!roiRecord) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'ROI record not found',
+                    error: "ROI record not found",
                 });
             }
             return res.status(StatusCodes.OK).json({
@@ -106,33 +108,86 @@ export const roiRecordController = {
             });
         }
         catch (error) {
-            console.error('Error fetching ROI record:', error);
+            console.error("Error fetching ROI record:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch ROI record',
+                error: "Failed to fetch ROI record",
             });
         }
     },
     // Get all ROI records
     async getAllROIRecords(req, res) {
+        const { userId, page = "1", limit = "10", planId, startDate, endDate, } = req.query;
         try {
-            const roiRecords = await prisma.rOIRecord.findMany({
-                include: {
-                    user: {
-                        select: { id: true, name: true, email: true },
+            // Validate userId
+            if (!userId) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: "userId is required",
+                });
+            }
+            // Pagination setup
+            const pageNum = parseInt(page, 10);
+            const limitNum = parseInt(limit, 10);
+            const skip = (pageNum - 1) * limitNum;
+            // Build where clause
+            const where = {
+                userId: userId,
+            };
+            // Filter by plan (via investment's planId)
+            if (planId) {
+                where.investment = {
+                    planId: planId,
+                };
+            }
+            // Filter by date range (createdAt)
+            if (startDate || endDate) {
+                where.createdAt = {};
+                if (startDate) {
+                    where.createdAt.gte = new Date(startDate);
+                }
+                if (endDate) {
+                    where.createdAt.lte = new Date(endDate);
+                }
+            }
+            // Fetch paginated ROI records
+            const [roiRecords, total] = await Promise.all([
+                prisma.rOIRecord.findMany({
+                    where,
+                    include: {
+                        user: {
+                            select: { id: true, name: true, email: true },
+                        },
+                        investment: {
+                            select: {
+                                id: true,
+                                amountInvested: true,
+                                status: true,
+                                plan: {
+                                    select: { id: true, name: true },
+                                },
+                            },
+                        },
                     },
-                    investment: {
-                        select: { id: true, amountInvested: true, status: true },
-                    },
-                },
-            });
+                    skip,
+                    take: limitNum,
+                    orderBy: { createdAt: "desc" }, // Latest first
+                }),
+                prisma.rOIRecord.count({ where }),
+            ]);
+            const totalPages = Math.ceil(total / limitNum);
             return res.status(StatusCodes.OK).json({
                 data: roiRecords,
+                pagination: {
+                    currentPage: pageNum,
+                    totalPages,
+                    totalItems: total,
+                    itemsPerPage: limitNum,
+                },
             });
         }
         catch (error) {
-            console.error('Error fetching ROI records:', error);
+            console.error("Error fetching ROI records:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch ROI records',
+                error: "Failed to fetch ROI records",
             });
         }
     },
@@ -145,7 +200,7 @@ export const roiRecordController = {
             const roiRecord = await prisma.rOIRecord.findUnique({ where: { id } });
             if (!roiRecord) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'ROI record not found',
+                    error: "ROI record not found",
                 });
             }
             // Prepare update data
@@ -153,7 +208,7 @@ export const roiRecordController = {
             if (weekNumber !== undefined) {
                 if (weekNumber < 1) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'weekNumber must be positive',
+                        error: "weekNumber must be positive",
                     });
                 }
                 updateData.weekNumber = weekNumber;
@@ -161,7 +216,7 @@ export const roiRecordController = {
             if (roiAmount !== undefined) {
                 if (roiAmount < 0) {
                     return res.status(StatusCodes.BAD_REQUEST).json({
-                        error: 'roiAmount must be non-negative',
+                        error: "roiAmount must be non-negative",
                     });
                 }
                 updateData.roiAmount = roiAmount;
@@ -171,15 +226,17 @@ export const roiRecordController = {
             }
             if (investmentId !== undefined) {
                 if (investmentId) {
-                    const investment = await prisma.investment.findUnique({ where: { id: investmentId } });
+                    const investment = await prisma.investment.findUnique({
+                        where: { id: investmentId },
+                    });
                     if (!investment) {
                         return res.status(StatusCodes.NOT_FOUND).json({
-                            error: 'Investment not found',
+                            error: "Investment not found",
                         });
                     }
                     if (investment.userId !== roiRecord.userId) {
                         return res.status(StatusCodes.BAD_REQUEST).json({
-                            error: 'Investment does not belong to the specified user',
+                            error: "Investment does not belong to the specified user",
                         });
                     }
                 }
@@ -207,14 +264,14 @@ export const roiRecordController = {
                 },
             });
             return res.status(StatusCodes.OK).json({
-                message: 'ROI record updated successfully',
+                message: "ROI record updated successfully",
                 data: updatedROIRecord,
             });
         }
         catch (error) {
-            console.error('Error updating ROI record:', error);
+            console.error("Error updating ROI record:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to update ROI record',
+                error: "Failed to update ROI record",
             });
         }
     },
@@ -225,7 +282,7 @@ export const roiRecordController = {
             const roiRecord = await prisma.rOIRecord.findUnique({ where: { id } });
             if (!roiRecord) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'ROI record not found',
+                    error: "ROI record not found",
                 });
             }
             // Update user's totalEarnings by subtracting the roiAmount
@@ -237,13 +294,13 @@ export const roiRecordController = {
             }
             await prisma.rOIRecord.delete({ where: { id } });
             return res.status(StatusCodes.OK).json({
-                message: 'ROI record deleted successfully',
+                message: "ROI record deleted successfully",
             });
         }
         catch (error) {
-            console.error('Error deleting ROI record:', error);
+            console.error("Error deleting ROI record:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to delete ROI record',
+                error: "Failed to delete ROI record",
             });
         }
     },
@@ -254,7 +311,7 @@ export const roiRecordController = {
             const user = await prisma.user.findUnique({ where: { id: userId } });
             if (!user) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'User not found',
+                    error: "User not found",
                 });
             }
             const roiRecords = await prisma.rOIRecord.findMany({
@@ -273,9 +330,9 @@ export const roiRecordController = {
             });
         }
         catch (error) {
-            console.error('Error fetching ROI records by user:', error);
+            console.error("Error fetching ROI records by user:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch ROI records',
+                error: "Failed to fetch ROI records",
             });
         }
     },
@@ -283,10 +340,12 @@ export const roiRecordController = {
     async getROIRecordsByInvestmentId(req, res) {
         try {
             const investmentId = req.params.investmentId;
-            const investment = await prisma.investment.findUnique({ where: { id: investmentId } });
+            const investment = await prisma.investment.findUnique({
+                where: { id: investmentId },
+            });
             if (!investment) {
                 return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'Investment not found',
+                    error: "Investment not found",
                 });
             }
             const roiRecords = await prisma.rOIRecord.findMany({
@@ -305,9 +364,9 @@ export const roiRecordController = {
             });
         }
         catch (error) {
-            console.error('Error fetching ROI records by investment:', error);
+            console.error("Error fetching ROI records by investment:", error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                error: 'Failed to fetch ROI records',
+                error: "Failed to fetch ROI records",
             });
         }
     },

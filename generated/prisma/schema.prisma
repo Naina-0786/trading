@@ -73,16 +73,17 @@ model User {
   updatedAt      DateTime @updatedAt
 
   // Relations
-  wallet        Wallet?         @relation("UserToWallet") // Removed fields and references
-  investments   Investment[]
-  transactions  Transaction[]
-  withdrawals   Withdrawal[]
-  transfersSent Transfer[]      @relation("sentTransfers")
-  transfersRecv Transfer[]      @relation("receivedTransfers")
-  referralsMade Referral[]      @relation("Referrer")
-  referralsGot  Referral[]      @relation("Referred") // referrals where this user is the referredUser
-  roiRecords    ROIRecord[]
-  SupportTicket SupportTicket[]
+  wallet            Wallet?            @relation("UserToWallet") // Removed fields and references
+  investments       Investment[]
+  transactions      Transaction[]
+  withdrawals       Withdrawal[]
+  transfersSent     Transfer[]         @relation("sentTransfers")
+  transfersRecv     Transfer[]         @relation("receivedTransfers")
+  referralsMade     Referral[]         @relation("Referrer")
+  referralsGot      Referral[]         @relation("Referred") // referrals where this user is the referredUser
+  roiRecords        ROIRecord[]
+  SupportTicket     SupportTicket[]
+  userNotifications UserNotification[]
 
   @@unique([email, referralCode, referredById])
   @@index([referredById])
@@ -303,16 +304,30 @@ enum NotificationType {
 }
 
 model Notification {
-  id        String           @id @default(uuid())
-  title     String
-  message   String
-  type      NotificationType @default(INFO)
-  meta      Json? // Optional metadata (e.g., { "actionUrl": "/dashboard", "imageUrl": "..." })
-  expiresAt DateTime? // Optional expiration for time-sensitive notifications
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id                String             @id @default(uuid())
+  title             String
+  message           String
+  type              NotificationType   @default(INFO)
+  meta              Json? // Optional metadata (e.g., { "actionUrl": "/dashboard", "imageUrl": "..." })
+  expiresAt         DateTime? // Optional expiration for time-sensitive notifications
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  userNotifications UserNotification[]
 
   @@index([type])
   @@index([createdAt])
   @@index([expiresAt])
+}
+
+model UserNotification {
+  id             String @id @default(uuid())
+  userId         String
+  notificationId String
+
+  user         User         @relation(fields: [userId], references: [id])
+  notification Notification @relation(fields: [notificationId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, notificationId]) // prevent duplicates
 }

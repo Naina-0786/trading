@@ -114,11 +114,23 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     });
     const activeSubs = activeInvestments.map((inv) => {
         const remainingMonths = Math.ceil((inv.endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30));
+        // Determine ROI type and rate
+        let roiRate = "0%";
+        let roiType = "Monthly"; // Default
+        if (inv.plan.roiPerDay) {
+            roiRate = `${(Number(inv.plan.roiPerDay) * 100).toFixed(0)}% Daily`;
+            roiType = "Daily";
+        }
+        else if (inv.plan.roiPerMonth) {
+            roiRate = `${(Number(inv.plan.roiPerMonth) * 100).toFixed(0)}% Monthly`;
+            roiType = "Monthly";
+        }
         return {
             planName: inv.plan.name,
             duration: `${inv.plan.durationInMonths} Months`,
             amountInvested: inv.amountInvested.toString(),
-            roiMonthly: `${(Number(inv.plan.roiPerMonth || 0) * 100).toFixed(0)}% Monthly`,
+            roiRate, // Dynamic label and value
+            roiType, // New field for type (Daily/Monthly)
             remaining: `${remainingMonths} months remaining`,
         };
     });
