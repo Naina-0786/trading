@@ -240,6 +240,7 @@ exports.Prisma.SettingScalarFieldEnum = {
   email: 'email',
   activeUser: 'activeUser',
   totalUser: 'totalUser',
+  location: 'location',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -383,7 +384,8 @@ exports.Prisma.SettingOrderByRelevanceFieldEnum = {
   phoneNumber: 'phoneNumber',
   email: 'email',
   activeUser: 'activeUser',
-  totalUser: 'totalUser'
+  totalUser: 'totalUser',
+  location: 'location'
 };
 
 exports.Prisma.SupportTicketOrderByRelevanceFieldEnum = {

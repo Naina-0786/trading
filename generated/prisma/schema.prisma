@@ -229,6 +229,7 @@ model Setting {
   email       String?
   activeUser  String?
   totalUser   String?
+  location    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

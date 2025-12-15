@@ -12034,6 +12034,7 @@ export namespace Prisma {
     email: string | null
     activeUser: string | null
     totalUser: string | null
+    location: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12044,6 +12045,7 @@ export namespace Prisma {
     email: string | null
     activeUser: string | null
     totalUser: string | null
+    location: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12054,6 +12056,7 @@ export namespace Prisma {
     email: number
     activeUser: number
     totalUser: number
+    location: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12066,6 +12069,7 @@ export namespace Prisma {
     email?: true
     activeUser?: true
     totalUser?: true
+    location?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12076,6 +12080,7 @@ export namespace Prisma {
     email?: true
     activeUser?: true
     totalUser?: true
+    location?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12086,6 +12091,7 @@ export namespace Prisma {
     email?: true
     activeUser?: true
     totalUser?: true
+    location?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12169,6 +12175,7 @@ export namespace Prisma {
     email: string | null
     activeUser: string | null
     totalUser: string | null
+    location: string | null
     createdAt: Date
     updatedAt: Date
     _count: SettingCountAggregateOutputType | null
@@ -12196,6 +12203,7 @@ export namespace Prisma {
     email?: boolean
     activeUser?: boolean
     totalUser?: boolean
+    location?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["setting"]>
@@ -12208,11 +12216,12 @@ export namespace Prisma {
     email?: boolean
     activeUser?: boolean
     totalUser?: boolean
+    location?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "activeUser" | "totalUser" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
+  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "activeUser" | "totalUser" | "location" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
 
   export type $SettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Setting"
@@ -12223,6 +12232,7 @@ export namespace Prisma {
       email: string | null
       activeUser: string | null
       totalUser: string | null
+      location: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["setting"]>
@@ -12599,6 +12609,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Setting", 'String'>
     readonly activeUser: FieldRef<"Setting", 'String'>
     readonly totalUser: FieldRef<"Setting", 'String'>
+    readonly location: FieldRef<"Setting", 'String'>
     readonly createdAt: FieldRef<"Setting", 'DateTime'>
     readonly updatedAt: FieldRef<"Setting", 'DateTime'>
   }
@@ -17710,6 +17721,7 @@ export namespace Prisma {
     email: 'email',
     activeUser: 'activeUser',
     totalUser: 'totalUser',
+    location: 'location',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17913,7 +17925,8 @@ export namespace Prisma {
     phoneNumber: 'phoneNumber',
     email: 'email',
     activeUser: 'activeUser',
-    totalUser: 'totalUser'
+    totalUser: 'totalUser',
+    location: 'location'
   };
 
   export type SettingOrderByRelevanceFieldEnum = (typeof SettingOrderByRelevanceFieldEnum)[keyof typeof SettingOrderByRelevanceFieldEnum]
@@ -18885,6 +18898,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Setting"> | string | null
     activeUser?: StringNullableFilter<"Setting"> | string | null
     totalUser?: StringNullableFilter<"Setting"> | string | null
+    location?: StringNullableFilter<"Setting"> | string | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
   }
@@ -18895,6 +18909,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     activeUser?: SortOrderInput | SortOrder
     totalUser?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _relevance?: SettingOrderByRelevanceInput
@@ -18909,6 +18924,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Setting"> | string | null
     activeUser?: StringNullableFilter<"Setting"> | string | null
     totalUser?: StringNullableFilter<"Setting"> | string | null
+    location?: StringNullableFilter<"Setting"> | string | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
   }, "id">
@@ -18919,6 +18935,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     activeUser?: SortOrderInput | SortOrder
     totalUser?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SettingCountOrderByAggregateInput
@@ -18935,6 +18952,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     activeUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     totalUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
+    location?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
   }
@@ -20086,6 +20104,7 @@ export namespace Prisma {
     email?: string | null
     activeUser?: string | null
     totalUser?: string | null
+    location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20096,6 +20115,7 @@ export namespace Prisma {
     email?: string | null
     activeUser?: string | null
     totalUser?: string | null
+    location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20106,6 +20126,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20116,6 +20137,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20126,6 +20148,7 @@ export namespace Prisma {
     email?: string | null
     activeUser?: string | null
     totalUser?: string | null
+    location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20136,6 +20159,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20146,6 +20170,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21450,6 +21475,7 @@ export namespace Prisma {
     email?: SortOrder
     activeUser?: SortOrder
     totalUser?: SortOrder
+    location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -21460,6 +21486,7 @@ export namespace Prisma {
     email?: SortOrder
     activeUser?: SortOrder
     totalUser?: SortOrder
+    location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -21470,6 +21497,7 @@ export namespace Prisma {
     email?: SortOrder
     activeUser?: SortOrder
     totalUser?: SortOrder
+    location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

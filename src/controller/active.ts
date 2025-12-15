@@ -3,9 +3,9 @@ import { asyncHandler } from "../middleware/error.middleware.js";
 import { ErrorResponse, SuccessResponse } from "../utils/response.util.js";
 
 const updateSetting = asyncHandler(async (req, res, next) => {
-  const { phoneNumber, email, activeUser, totalUser } = req.body;
+  const { phoneNumber, email, activeUser, totalUser, location } = req.body;
 
-  if (!email && !phoneNumber && !activeUser && !totalUser) {
+  if (!email && !phoneNumber && !activeUser && !totalUser && !location) {
     return next(new ErrorResponse("At least one field is required", 400));
   }
 
@@ -20,6 +20,7 @@ const updateSetting = asyncHandler(async (req, res, next) => {
         email,
         activeUser,
         totalUser,
+        location,
       },
     });
   } else {
@@ -29,6 +30,7 @@ const updateSetting = asyncHandler(async (req, res, next) => {
         email,
         activeUser,
         totalUser,
+        location,
       },
     });
   }

@@ -2,8 +2,8 @@ import prisma from "../config/prisma.js";
 import { asyncHandler } from "../middleware/error.middleware.js";
 import { ErrorResponse, SuccessResponse } from "../utils/response.util.js";
 const updateSetting = asyncHandler(async (req, res, next) => {
-    const { phoneNumber, email, activeUser, totalUser } = req.body;
-    if (!email && !phoneNumber && !activeUser && !totalUser) {
+    const { phoneNumber, email, activeUser, totalUser, location } = req.body;
+    if (!email && !phoneNumber && !activeUser && !totalUser && !location) {
         return next(new ErrorResponse("At least one field is required", 400));
     }
     const settingConfig = await prisma.setting.findFirst({});
@@ -16,6 +16,7 @@ const updateSetting = asyncHandler(async (req, res, next) => {
                 email,
                 activeUser,
                 totalUser,
+                location,
             },
         });
     }
@@ -26,6 +27,7 @@ const updateSetting = asyncHandler(async (req, res, next) => {
                 email,
                 activeUser,
                 totalUser,
+                location,
             },
         });
     }
