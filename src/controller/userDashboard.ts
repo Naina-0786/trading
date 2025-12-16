@@ -5,13 +5,18 @@ import { ErrorResponse } from "../utils/response.util.js";
 export const getUserDashboard = asyncHandler(async (req, res, next) => {
   const userId = req.params.id!;
 
+  // FIX 1: Fetch the 'wallet' relation to get the active balance
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
       name: true,
       referralCode: true,
-      usdtBalance: true,
       totalEarnings: true,
+      wallet: {
+        select: {
+          balance: true,
+        },
+      },
     },
   });
 
@@ -19,7 +24,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("User not found", 404));
   }
 
-  // Total Invested: Sum of amountInvested for ACTIVE or COMPLETED investments
+  // Total Invested
   const investmentAggregate = await prisma.investment.aggregate({
     where: {
       userId,
@@ -29,7 +34,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
   });
   const totalInvested = Number(investmentAggregate._sum.amountInvested || 0);
 
-  // Monthly ROI: Sum of roiAmount for current month
+  // Monthly ROI
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthlyRoiAggregate = await prisma.rOIRecord.aggregate({
@@ -41,7 +46,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
   });
   const monthlyRoiAmount = Number(monthlyRoiAggregate._sum.roiAmount || 0);
 
-  // Daily ROI: Sum of roiAmount for today
+  // Daily ROI
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const dailyRoiAggregate = await prisma.rOIRecord.aggregate({
     where: {
@@ -52,25 +57,26 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
   });
   const dailyRoiAmount = Number(dailyRoiAggregate._sum.roiAmount || 0);
 
-  // Total ROI: Sum of all roiAmount
+  // Total ROI
   const allRoiAggregate = await prisma.rOIRecord.aggregate({
     where: { userId },
     _sum: { roiAmount: true },
   });
   const totalRoi = Number(allRoiAggregate._sum.roiAmount || 0);
 
-  // Profit Earned: Total ROI + Total Earnings
+  // Profit Earned
   const profitEarned = totalRoi + Number(user.totalEarnings);
 
-  // ROI Percentage: (Profit / Total Invested) * 100
-  const roiPercentage = totalInvested > 0 ? Math.round((profitEarned / totalInvested) * 100) : 0;
+  // ROI Percentage
+  const roiPercentage = totalInvested > 0 ? (profitEarned / totalInvested) * 100 : 0;
 
-  // Current Balance: Total Invested + Profit Earned (assuming invested assets + earnings)
-  const currentBalance = totalInvested + profitEarned;
+  // FIX 2: Read balance from 'user.wallet.balance' instead of 'user.usdtBalance'
+  // using optional chaining (?) in case wallet doesn't exist yet
+  const currentBalance = Number(user.wallet?.balance || 0);
 
-  // Charts Data: All 12 months of the current year for ROI and REFERRAL_BONUS transactions
+  // Charts Data
   const currentYear = now.getFullYear();
-  const startDate = new Date(currentYear, 0, 1); // January 1st of current year
+  const startDate = new Date(currentYear, 0, 1);
   const relevantTransactions = await prisma.transaction.findMany({
     where: {
       userId,
@@ -81,7 +87,6 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     orderBy: { createdAt: "asc" },
   });
 
-  // Generate all 12 months structure for the current year
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const months: any[] = [];
   for (let i = 0; i < 12; i++) {
@@ -95,7 +100,6 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // Group transactions by month
   relevantTransactions.forEach((tx) => {
     const date = new Date(tx.createdAt);
     if (date.getFullYear() === currentYear) {
@@ -111,16 +115,14 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     }
   });
 
-  // Calculate balanceData (cumulative total)
   let cumulative = 0;
   const balanceData = months.map((m) => {
     cumulative += m.total;
-    return { month: m.month, balance: Math.round(cumulative) };
+    return { month: m.month, balance: Number(cumulative.toFixed(4)) };
   });
 
-  // Calculate referralData
   const referralData = months.map((m) => {
-    return { month: m.month, earnings: Math.round(m.referral) };
+    return { month: m.month, earnings: Number(m.referral.toFixed(4)) };
   });
 
   // Active Subscriptions
@@ -130,53 +132,54 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
   });
 
   const activeSubs = activeInvestments.map((inv: any) => {
-    const remainingMonths = Math.ceil(
-      (inv.endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30)
-    );
+    let remainingMonths = 0;
+    if (inv.endDate) {
+       remainingMonths = Math.ceil(
+        (new Date(inv.endDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30)
+      );
+    }
+    remainingMonths = remainingMonths > 0 ? remainingMonths : 0;
 
-    // Determine ROI type and rate
     let roiRate = "0%";
-    let roiType = "Monthly"; // Default
+    let roiType = "Monthly";
     if (inv.plan.roiPerDay) {
-      roiRate = `${(Number(inv.plan.roiPerDay) * 100).toFixed(0)}% Daily`;
+      roiRate = `${Number((Number(inv.plan.roiPerDay) * 100).toFixed(2))}% Daily`;
       roiType = "Daily";
     } else if (inv.plan.roiPerMonth) {
-      roiRate = `${(Number(inv.plan.roiPerMonth) * 100).toFixed(0)}% Monthly`;
+      roiRate = `${Number((Number(inv.plan.roiPerMonth) * 100).toFixed(2))}% Monthly`;
       roiType = "Monthly";
     }
 
     return {
       planName: inv.plan.name,
       duration: `${inv.plan.durationInMonths} Months`,
-      amountInvested: inv.amountInvested.toString(),
-      roiRate, // Dynamic label and value
-      roiType, // New field for type (Daily/Monthly)
+      amountInvested: Number(inv.amountInvested).toString(),
+      roiRate,
+      roiType,
       remaining: `${remainingMonths} months remaining`,
     };
   });
 
-  // Referral Link
   const referralLink = `https://www.expotradex.com/auth/signup/?referralId=${user.referralCode}`;
 
-  // Structured Dashboard Data
   const dashboardData = {
     userName: user.name || "User",
     referralLink,
     kpis: {
-      totalInvested: totalInvested.toFixed(0),
-      currentBalance: currentBalance.toFixed(0),
-      monthlyROI: monthlyRoiAmount.toFixed(0),
-      dailyROI: dailyRoiAmount.toFixed(0),
-      referralEarnings: Number(user.totalEarnings).toFixed(0),
+      totalInvested: Number(totalInvested.toFixed(2)),
+      currentBalance: Number(currentBalance.toFixed(4)), // Should now show 20
+      monthlyROI: Number(monthlyRoiAmount.toFixed(4)),
+      dailyROI: Number(dailyRoiAmount.toFixed(4)),
+      referralEarnings: Number(Number(user.totalEarnings).toFixed(4)),
     },
     charts: {
       balanceData,
       referralData,
     },
     summary: {
-      totalInvested: totalInvested.toFixed(0),
-      profitEarned: profitEarned.toFixed(0),
-      roiPercentage: `+${roiPercentage}%`,
+      totalInvested: Number(totalInvested.toFixed(2)),
+      profitEarned: Number(profitEarned.toFixed(4)),
+      roiPercentage: `+${Number(roiPercentage.toFixed(2))}%`,
     },
     activeSubscriptions: {
       count: activeSubs.length,
