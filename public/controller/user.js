@@ -168,6 +168,9 @@ export const userController = {
                 where: { id: id },
                 include: {
                     wallet: true,
+                    referrals: true,
+                    referralsGot: true,
+                    referralsMade: true,
                     referredBy: { select: { id: true, name: true, email: true } },
                     investments: {
                         where: { status: 'ACTIVE' }, // Only active investments for ROI calculation

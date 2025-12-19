@@ -79,7 +79,7 @@ model User {
   withdrawals       Withdrawal[]
   transfersSent     Transfer[]         @relation("sentTransfers")
   transfersRecv     Transfer[]         @relation("receivedTransfers")
-  referralsMade     Referral[]         @relation("Referrer")
+  referralsMade     Referral[]         @relation("Referrer") // referrals where this user is the referrer
   referralsGot      Referral[]         @relation("Referred") // referrals where this user is the referredUser
   roiRecords        ROIRecord[]
   SupportTicket     SupportTicket[]
