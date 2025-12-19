@@ -405,6 +405,14 @@ export const userController = {
                     skip,
                     take: limit,
                     select: {
+                        wallet: {
+                            select: {
+                                // id: true,
+                                walletAddress: true,
+                                balance: true,
+                                currency: true,
+                            }
+                        },
                         id: true,
                         name: true,
                         email: true,
