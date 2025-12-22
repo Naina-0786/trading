@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import {
   InvestmentStatus,
+  TransactionType,
+  TransactionStatus,
   Prisma
 } from "../../generated/prisma/index.js";
 import prisma from "../config/prisma.js";
@@ -263,23 +265,108 @@ export const investmentController = {
       if (totalReturn !== undefined) updateData.totalReturn = totalReturn;
 
       // Update investment
-      const updatedInvestment = await prisma.investment.update({
-        where: { id },
-        data: updateData,
-        include: {
-          user: {
-            select: { id: true, name: true, email: true },
-          },
-          plan: {
-            select: {
-              id: true,
-              name: true,
-              minimumInvestment: true,
-              roiPerMonth: true,
+      
+      let updatedInvestment;
+
+      // Handle Referral Bonus if status is changed to ACTIVE
+      if (status === InvestmentStatus.ACTIVE && investment.status !== InvestmentStatus.ACTIVE) {
+        updatedInvestment = await prisma.$transaction(async (tx) => {
+          // 1. Update investment
+          const inv = await tx.investment.update({
+            where: { id },
+            data: updateData,
+            include: {
+              user: {
+                select: { id: true, name: true, email: true },
+              },
+              plan: {
+                select: {
+                  id: true,
+                  name: true,
+                  minimumInvestment: true,
+                  roiPerMonth: true,
+                },
+              },
             },
-          },
-        },
-      });
+          });
+
+          // 2. Fetch User and Referrer
+          const user = await tx.user.findUnique({
+             where: { id: investment.userId },
+             include: { referredBy: true }
+          });
+
+          // 3. Apply Bonus Logic
+          if (user && user.referredBy) {
+             const investDate = new Date(investment.createdAt);
+             const joinDate = new Date(user.createdAt);
+             const diffTime = Math.abs(investDate.getTime() - joinDate.getTime());
+             const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+             let bonusPercent = 0.05; // 5% by default
+             if (diffDays <= 10) {
+                 bonusPercent = 0.15; // 15% if within 10 days
+             }
+
+             // Calculate bonus amount
+             const currentAmount = updateData.amountInvested 
+                ? Number(updateData.amountInvested) 
+                : Number(investment.amountInvested);
+             
+             const bonusAmount = new Prisma.Decimal(currentAmount * bonusPercent);
+
+             // Update Referrer Wallet/Earnings
+             await tx.user.update({
+                 where: { id: user.referredBy.id },
+                 data: {
+                     totalEarnings: { increment: bonusAmount },
+                     usdtBalance: { increment: bonusAmount },
+                 }
+             });
+
+             // Sync Wallet balance
+             await tx.wallet.updateMany({
+                where: { userId: user.referredBy.id },
+                data: {
+                    balance: { increment: bonusAmount }
+                }
+             });
+
+             // Create Transaction Record
+             await tx.transaction.create({
+                 data: {
+                     userId: user.referredBy.id,
+                     type: TransactionType.REFERRAL_BONUS,
+                     amount: bonusAmount,
+                     status: TransactionStatus.SUCCESS,
+                     description: `Referral Bonus for user ${user.email || user.id}`,
+                     investmentId: investment.id
+                 }
+             });
+          }
+
+          return inv;
+        });
+      } else {
+        // Standard update without bonus
+        updatedInvestment = await prisma.investment.update({
+            where: { id },
+            data: updateData,
+            include: {
+              user: {
+                select: { id: true, name: true, email: true },
+              },
+              plan: {
+                select: {
+                  id: true,
+                  name: true,
+                  minimumInvestment: true,
+                  roiPerMonth: true,
+                },
+              },
+            },
+          });
+      }
 
       return res.status(StatusCodes.OK).json({
         message: "Investment updated successfully",
