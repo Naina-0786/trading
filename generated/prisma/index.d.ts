@@ -4783,6 +4783,7 @@ export namespace Prisma {
     maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
+    maximumEarning: Decimal | null
     durationInMonths: number | null
   }
 
@@ -4791,6 +4792,7 @@ export namespace Prisma {
     maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
+    maximumEarning: Decimal | null
     durationInMonths: number | null
   }
 
@@ -4801,6 +4803,7 @@ export namespace Prisma {
     maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
+    maximumEarning: Decimal | null
     durationInMonths: number | null
     description: string | null
     isActive: boolean | null
@@ -4815,6 +4818,7 @@ export namespace Prisma {
     maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
+    maximumEarning: Decimal | null
     durationInMonths: number | null
     description: string | null
     isActive: boolean | null
@@ -4829,6 +4833,7 @@ export namespace Prisma {
     maximumInvestment: number
     roiPerMonth: number
     roiPerDay: number
+    maximumEarning: number
     durationInMonths: number
     description: number
     isActive: number
@@ -4843,6 +4848,7 @@ export namespace Prisma {
     maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
+    maximumEarning?: true
     durationInMonths?: true
   }
 
@@ -4851,6 +4857,7 @@ export namespace Prisma {
     maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
+    maximumEarning?: true
     durationInMonths?: true
   }
 
@@ -4861,6 +4868,7 @@ export namespace Prisma {
     maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
+    maximumEarning?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4875,6 +4883,7 @@ export namespace Prisma {
     maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
+    maximumEarning?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4889,6 +4898,7 @@ export namespace Prisma {
     maximumInvestment?: true
     roiPerMonth?: true
     roiPerDay?: true
+    maximumEarning?: true
     durationInMonths?: true
     description?: true
     isActive?: true
@@ -4990,6 +5000,7 @@ export namespace Prisma {
     maximumInvestment: Decimal | null
     roiPerMonth: Decimal | null
     roiPerDay: Decimal | null
+    maximumEarning: Decimal | null
     durationInMonths: number
     description: string | null
     isActive: boolean
@@ -5023,6 +5034,7 @@ export namespace Prisma {
     maximumInvestment?: boolean
     roiPerMonth?: boolean
     roiPerDay?: boolean
+    maximumEarning?: boolean
     durationInMonths?: boolean
     description?: boolean
     isActive?: boolean
@@ -5041,6 +5053,7 @@ export namespace Prisma {
     maximumInvestment?: boolean
     roiPerMonth?: boolean
     roiPerDay?: boolean
+    maximumEarning?: boolean
     durationInMonths?: boolean
     description?: boolean
     isActive?: boolean
@@ -5048,7 +5061,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "maximumInvestment" | "roiPerMonth" | "roiPerDay" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
+  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "minimumInvestment" | "maximumInvestment" | "roiPerMonth" | "roiPerDay" | "maximumEarning" | "durationInMonths" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
   export type SubscriptionPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     investments?: boolean | SubscriptionPlan$investmentsArgs<ExtArgs>
     _count?: boolean | SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -5066,6 +5079,7 @@ export namespace Prisma {
       maximumInvestment: Prisma.Decimal | null
       roiPerMonth: Prisma.Decimal | null
       roiPerDay: Prisma.Decimal | null
+      maximumEarning: Prisma.Decimal | null
       durationInMonths: number
       description: string | null
       isActive: boolean
@@ -5447,6 +5461,7 @@ export namespace Prisma {
     readonly maximumInvestment: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly roiPerMonth: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly roiPerDay: FieldRef<"SubscriptionPlan", 'Decimal'>
+    readonly maximumEarning: FieldRef<"SubscriptionPlan", 'Decimal'>
     readonly durationInMonths: FieldRef<"SubscriptionPlan", 'Int'>
     readonly description: FieldRef<"SubscriptionPlan", 'String'>
     readonly isActive: FieldRef<"SubscriptionPlan", 'Boolean'>
@@ -11035,6 +11050,7 @@ export namespace Prisma {
     weekNumber: number | null
     roiAmount: Decimal | null
     isReferralBonusApplied: boolean | null
+    creditedForDate: Date | null
     createdAt: Date | null
   }
 
@@ -11045,6 +11061,7 @@ export namespace Prisma {
     weekNumber: number | null
     roiAmount: Decimal | null
     isReferralBonusApplied: boolean | null
+    creditedForDate: Date | null
     createdAt: Date | null
   }
 
@@ -11055,6 +11072,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: number
     isReferralBonusApplied: number
+    creditedForDate: number
     createdAt: number
     _all: number
   }
@@ -11077,6 +11095,7 @@ export namespace Prisma {
     weekNumber?: true
     roiAmount?: true
     isReferralBonusApplied?: true
+    creditedForDate?: true
     createdAt?: true
   }
 
@@ -11087,6 +11106,7 @@ export namespace Prisma {
     weekNumber?: true
     roiAmount?: true
     isReferralBonusApplied?: true
+    creditedForDate?: true
     createdAt?: true
   }
 
@@ -11097,6 +11117,7 @@ export namespace Prisma {
     weekNumber?: true
     roiAmount?: true
     isReferralBonusApplied?: true
+    creditedForDate?: true
     createdAt?: true
     _all?: true
   }
@@ -11194,6 +11215,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal
     isReferralBonusApplied: boolean
+    creditedForDate: Date | null
     createdAt: Date
     _count: ROIRecordCountAggregateOutputType | null
     _avg: ROIRecordAvgAggregateOutputType | null
@@ -11223,6 +11245,7 @@ export namespace Prisma {
     weekNumber?: boolean
     roiAmount?: boolean
     isReferralBonusApplied?: boolean
+    creditedForDate?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     investment?: boolean | ROIRecord$investmentArgs<ExtArgs>
@@ -11237,10 +11260,11 @@ export namespace Prisma {
     weekNumber?: boolean
     roiAmount?: boolean
     isReferralBonusApplied?: boolean
+    creditedForDate?: boolean
     createdAt?: boolean
   }
 
-  export type ROIRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "investmentId" | "weekNumber" | "roiAmount" | "isReferralBonusApplied" | "createdAt", ExtArgs["result"]["rOIRecord"]>
+  export type ROIRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "investmentId" | "weekNumber" | "roiAmount" | "isReferralBonusApplied" | "creditedForDate" | "createdAt", ExtArgs["result"]["rOIRecord"]>
   export type ROIRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     investment?: boolean | ROIRecord$investmentArgs<ExtArgs>
@@ -11259,6 +11283,7 @@ export namespace Prisma {
       weekNumber: number
       roiAmount: Prisma.Decimal
       isReferralBonusApplied: boolean
+      creditedForDate: Date | null
       createdAt: Date
     }, ExtArgs["result"]["rOIRecord"]>
     composites: {}
@@ -11637,6 +11662,7 @@ export namespace Prisma {
     readonly weekNumber: FieldRef<"ROIRecord", 'Int'>
     readonly roiAmount: FieldRef<"ROIRecord", 'Decimal'>
     readonly isReferralBonusApplied: FieldRef<"ROIRecord", 'Boolean'>
+    readonly creditedForDate: FieldRef<"ROIRecord", 'DateTime'>
     readonly createdAt: FieldRef<"ROIRecord", 'DateTime'>
   }
     
@@ -17614,6 +17640,7 @@ export namespace Prisma {
     maximumInvestment: 'maximumInvestment',
     roiPerMonth: 'roiPerMonth',
     roiPerDay: 'roiPerDay',
+    maximumEarning: 'maximumEarning',
     durationInMonths: 'durationInMonths',
     description: 'description',
     isActive: 'isActive',
@@ -17709,6 +17736,7 @@ export namespace Prisma {
     weekNumber: 'weekNumber',
     roiAmount: 'roiAmount',
     isReferralBonusApplied: 'isReferralBonusApplied',
+    creditedForDate: 'creditedForDate',
     createdAt: 'createdAt'
   };
 
@@ -18317,6 +18345,7 @@ export namespace Prisma {
     maximumInvestment?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
     description?: StringNullableFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolFilter<"SubscriptionPlan"> | boolean
@@ -18332,6 +18361,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrderInput | SortOrder
     roiPerMonth?: SortOrderInput | SortOrder
     roiPerDay?: SortOrderInput | SortOrder
+    maximumEarning?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -18351,6 +18381,7 @@ export namespace Prisma {
     maximumInvestment?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: DecimalNullableFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFilter<"SubscriptionPlan"> | number
     description?: StringNullableFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolFilter<"SubscriptionPlan"> | boolean
@@ -18366,6 +18397,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrderInput | SortOrder
     roiPerMonth?: SortOrderInput | SortOrder
     roiPerDay?: SortOrderInput | SortOrder
+    maximumEarning?: SortOrderInput | SortOrder
     durationInMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -18388,6 +18420,7 @@ export namespace Prisma {
     maximumInvestment?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: DecimalNullableWithAggregatesFilter<"SubscriptionPlan"> | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntWithAggregatesFilter<"SubscriptionPlan"> | number
     description?: StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
     isActive?: BoolWithAggregatesFilter<"SubscriptionPlan"> | boolean
@@ -18828,6 +18861,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"ROIRecord"> | number
     roiAmount?: DecimalFilter<"ROIRecord"> | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFilter<"ROIRecord"> | boolean
+    creditedForDate?: DateTimeNullableFilter<"ROIRecord"> | Date | string | null
     createdAt?: DateTimeFilter<"ROIRecord"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     investment?: XOR<InvestmentNullableScalarRelationFilter, InvestmentWhereInput> | null
@@ -18840,6 +18874,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     roiAmount?: SortOrder
     isReferralBonusApplied?: SortOrder
+    creditedForDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
     investment?: InvestmentOrderByWithRelationInput
@@ -18856,6 +18891,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"ROIRecord"> | number
     roiAmount?: DecimalFilter<"ROIRecord"> | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFilter<"ROIRecord"> | boolean
+    creditedForDate?: DateTimeNullableFilter<"ROIRecord"> | Date | string | null
     createdAt?: DateTimeFilter<"ROIRecord"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     investment?: XOR<InvestmentNullableScalarRelationFilter, InvestmentWhereInput> | null
@@ -18868,6 +18904,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     roiAmount?: SortOrder
     isReferralBonusApplied?: SortOrder
+    creditedForDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ROIRecordCountOrderByAggregateInput
     _avg?: ROIRecordAvgOrderByAggregateInput
@@ -18886,6 +18923,7 @@ export namespace Prisma {
     weekNumber?: IntWithAggregatesFilter<"ROIRecord"> | number
     roiAmount?: DecimalWithAggregatesFilter<"ROIRecord"> | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolWithAggregatesFilter<"ROIRecord"> | boolean
+    creditedForDate?: DateTimeNullableWithAggregatesFilter<"ROIRecord"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ROIRecord"> | Date | string
   }
 
@@ -19495,6 +19533,7 @@ export namespace Prisma {
     maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -19510,6 +19549,7 @@ export namespace Prisma {
     maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -19525,6 +19565,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -19540,6 +19581,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -19555,6 +19597,7 @@ export namespace Prisma {
     maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -19569,6 +19612,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -19583,6 +19627,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -20035,6 +20080,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutRoiRecordsInput
     investment?: InvestmentCreateNestedOneWithoutRoiRecordsInput
@@ -20047,6 +20093,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -20055,6 +20102,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutRoiRecordsNestedInput
     investment?: InvestmentUpdateOneWithoutRoiRecordsNestedInput
@@ -20067,6 +20115,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20077,6 +20126,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -20085,6 +20135,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20095,6 +20146,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20893,6 +20945,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
+    maximumEarning?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -20905,6 +20958,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
+    maximumEarning?: SortOrder
     durationInMonths?: SortOrder
   }
 
@@ -20915,6 +20969,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
+    maximumEarning?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -20929,6 +20984,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
+    maximumEarning?: SortOrder
     durationInMonths?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
@@ -20941,6 +20997,7 @@ export namespace Prisma {
     maximumInvestment?: SortOrder
     roiPerMonth?: SortOrder
     roiPerDay?: SortOrder
+    maximumEarning?: SortOrder
     durationInMonths?: SortOrder
   }
 
@@ -21430,6 +21487,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     roiAmount?: SortOrder
     isReferralBonusApplied?: SortOrder
+    creditedForDate?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -21445,6 +21503,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     roiAmount?: SortOrder
     isReferralBonusApplied?: SortOrder
+    creditedForDate?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -21455,6 +21514,7 @@ export namespace Prisma {
     weekNumber?: SortOrder
     roiAmount?: SortOrder
     isReferralBonusApplied?: SortOrder
+    creditedForDate?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -23489,6 +23549,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
     investment?: InvestmentCreateNestedOneWithoutRoiRecordsInput
   }
@@ -23499,6 +23560,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -23907,6 +23969,7 @@ export namespace Prisma {
     weekNumber?: IntFilter<"ROIRecord"> | number
     roiAmount?: DecimalFilter<"ROIRecord"> | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFilter<"ROIRecord"> | boolean
+    creditedForDate?: DateTimeNullableFilter<"ROIRecord"> | Date | string | null
     createdAt?: DateTimeFilter<"ROIRecord"> | Date | string
   }
 
@@ -24213,6 +24276,7 @@ export namespace Prisma {
     maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -24227,6 +24291,7 @@ export namespace Prisma {
     maximumInvestment?: Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: Decimal | DecimalJsLike | number | string | null
     roiPerDay?: Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: Decimal | DecimalJsLike | number | string | null
     durationInMonths: number
     description?: string | null
     isActive?: boolean
@@ -24244,6 +24309,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutRoiRecordsInput
   }
@@ -24254,6 +24320,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -24384,6 +24451,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -24398,6 +24466,7 @@ export namespace Prisma {
     maximumInvestment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerMonth?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     roiPerDay?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumEarning?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     durationInMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -25912,6 +25981,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -26248,6 +26318,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     investment?: InvestmentUpdateOneWithoutRoiRecordsNestedInput
   }
@@ -26258,6 +26329,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26267,6 +26339,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26381,6 +26454,7 @@ export namespace Prisma {
     weekNumber: number
     roiAmount: Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: boolean
+    creditedForDate?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -26401,6 +26475,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutRoiRecordsNestedInput
   }
@@ -26411,6 +26486,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26420,6 +26496,7 @@ export namespace Prisma {
     weekNumber?: IntFieldUpdateOperationsInput | number
     roiAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     isReferralBonusApplied?: BoolFieldUpdateOperationsInput | boolean
+    creditedForDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

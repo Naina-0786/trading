@@ -79,7 +79,7 @@ model User {
   withdrawals       Withdrawal[]
   transfersSent     Transfer[]         @relation("sentTransfers")
   transfersRecv     Transfer[]         @relation("receivedTransfers")
-  referralsMade     Referral[]         @relation("Referrer")
+  referralsMade     Referral[]         @relation("Referrer") // referrals where this user is the referrer
   referralsGot      Referral[]         @relation("Referred") // referrals where this user is the referredUser
   roiRecords        ROIRecord[]
   SupportTicket     SupportTicket[]
@@ -109,6 +109,7 @@ model SubscriptionPlan {
   maximumInvestment Decimal? @db.Decimal(18, 6)
   roiPerMonth       Decimal? @db.Decimal(18, 6)
   roiPerDay         Decimal? @db.Decimal(18, 6) // e.g., 0.10 for 10%
+  maximumEarning    Decimal? @db.Decimal(18, 6)
   durationInMonths  Int
   description       String?
   isActive          Boolean  @default(true)
@@ -217,6 +218,7 @@ model ROIRecord {
   weekNumber             Int
   roiAmount              Decimal     @db.Decimal(18, 6)
   isReferralBonusApplied Boolean     @default(false)
+  creditedForDate        DateTime?
   createdAt              DateTime    @default(now())
 
   @@index([userId])

@@ -154,6 +154,7 @@ exports.Prisma.SubscriptionPlanScalarFieldEnum = {
   maximumInvestment: 'maximumInvestment',
   roiPerMonth: 'roiPerMonth',
   roiPerDay: 'roiPerDay',
+  maximumEarning: 'maximumEarning',
   durationInMonths: 'durationInMonths',
   description: 'description',
   isActive: 'isActive',
@@ -231,6 +232,7 @@ exports.Prisma.ROIRecordScalarFieldEnum = {
   weekNumber: 'weekNumber',
   roiAmount: 'roiAmount',
   isReferralBonusApplied: 'isReferralBonusApplied',
+  creditedForDate: 'creditedForDate',
   createdAt: 'createdAt'
 };
 

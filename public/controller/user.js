@@ -163,131 +163,147 @@ export const userController = {
     async getUserById(req, res) {
         try {
             const { id } = req.params;
-            // Fetch user with investments and related plans
             const user = await prisma.user.findUnique({
                 where: { id: id },
                 include: {
                     wallet: true,
-                    referrals: true,
-                    referralsGot: true,
-                    referralsMade: true,
                     referredBy: { select: { id: true, name: true, email: true } },
                     investments: {
-                        where: { status: 'ACTIVE' }, // Only active investments for ROI calculation
+                        where: { status: 'ACTIVE' },
                         include: { plan: true },
                     },
                 },
             });
             if (!user) {
-                return res.status(StatusCodes.NOT_FOUND).json({
-                    error: 'User not found',
-                });
+                return res.status(StatusCodes.NOT_FOUND).json({ error: 'User not found' });
             }
-            // Calculate and credit missed ROIs if any active investments
-            if (user.investments.length > 0) {
-                const now = new Date();
-                for (const investment of user.investments) {
-                    const plan = investment.plan;
-                    const amountInvested = Number(investment.amountInvested);
-                    const lastRoiRecord = await prisma.rOIRecord.findFirst({
-                        where: { investmentId: investment.id },
-                        orderBy: { createdAt: 'desc' },
-                    });
-                    const lastCreditDate = lastRoiRecord ? new Date(lastRoiRecord.createdAt) : new Date(investment.startDate);
-                    // Determine ROI type and calculate missed periods
-                    if (plan.roiPerDay) {
-                        // Daily ROI
-                        const dailyRoi = amountInvested * Number(plan.roiPerDay);
-                        const daysMissed = Math.floor((now.getTime() - lastCreditDate.getTime()) / (1000 * 60 * 60 * 24));
-                        if (daysMissed > 0) {
-                            const totalMissedRoi = dailyRoi * daysMissed;
-                            // Credit to wallet
-                            await prisma.wallet.update({
-                                where: { userId: user.id },
-                                data: { balance: { increment: new Prisma.Decimal(totalMissedRoi) } },
+            // --------------------------------------------------
+            // ROI CALCULATION (SAFE, IDEMPOTENT)
+            // --------------------------------------------------
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // NEVER credit today
+            for (const investment of user.investments) {
+                const plan = investment.plan;
+                const amountInvested = Number(investment.amountInvested);
+                // Find last credited ROI day
+                const lastROI = await prisma.rOIRecord.findFirst({
+                    where: { investmentId: investment.id },
+                    orderBy: { creditedForDate: 'desc' },
+                });
+                let cursorDate = lastROI && lastROI.creditedForDate
+                    ? new Date(lastROI.creditedForDate)
+                    : new Date(investment.startDate);
+                cursorDate.setDate(cursorDate.getDate() + 1);
+                cursorDate.setHours(0, 0, 0, 0);
+                // ---------------- DAILY ROI ----------------
+                if (plan.roiPerDay) {
+                    const dailyRoi = amountInvested * Number(plan.roiPerDay);
+                    const roiRecords = [];
+                    const transactions = [];
+                    let totalAmount = 0;
+                    while (cursorDate < today) {
+                        const day = cursorDate.getDay(); // 0 Sun, 6 Sat
+                        if (day >= 1 && day <= 5) {
+                            totalAmount += dailyRoi;
+                            roiRecords.push({
+                                userId: user.id,
+                                investmentId: investment.id,
+                                creditedForDate: new Date(cursorDate),
+                                roiAmount: new Prisma.Decimal(dailyRoi),
+                                isReferralBonusApplied: false,
+                                weekNumber: 0
                             });
-                            // Create ROI record (aggregate for missed days)
-                            await prisma.rOIRecord.create({
-                                data: {
-                                    userId: user.id,
-                                    investmentId: investment.id,
-                                    weekNumber: Math.floor(daysMissed / 7) + (lastRoiRecord?.weekNumber || 0), // Approximate week
-                                    roiAmount: new Prisma.Decimal(totalMissedRoi),
-                                    isReferralBonusApplied: false,
-                                },
-                            });
-                            // Create transaction record
-                            await prisma.transaction.create({
-                                data: {
-                                    userId: user.id,
-                                    type: 'ROI',
-                                    amount: new Prisma.Decimal(totalMissedRoi),
-                                    status: 'SUCCESS',
-                                    description: `Missed daily ROI credit for ${daysMissed} days on investment ${investment.id}`,
-                                    investmentId: investment.id,
-                                },
+                            transactions.push({
+                                userId: user.id,
+                                type: 'ROI',
+                                amount: new Prisma.Decimal(dailyRoi),
+                                status: 'SUCCESS',
+                                description: `Daily ROI for ${cursorDate.toDateString()}`,
+                                investmentId: investment.id,
                             });
                         }
+                        cursorDate.setDate(cursorDate.getDate() + 1);
                     }
-                    else if (plan.roiPerMonth) {
-                        // Monthly ROI
-                        const monthlyRoi = amountInvested * Number(plan.roiPerMonth);
-                        let monthsMissed = 0;
-                        let currentDate = new Date(lastCreditDate);
-                        while (currentDate < now) {
-                            currentDate.setMonth(currentDate.getMonth() + 1);
-                            if (currentDate <= now)
-                                monthsMissed++;
-                        }
-                        if (monthsMissed > 0) {
-                            const totalMissedRoi = monthlyRoi * monthsMissed;
-                            // Credit to wallet
-                            await prisma.wallet.update({
+                    if (roiRecords.length > 0) {
+                        await prisma.$transaction([
+                            prisma.wallet.update({
                                 where: { userId: user.id },
-                                data: { balance: { increment: new Prisma.Decimal(totalMissedRoi) } },
-                            });
-                            // Create ROI record (aggregate for missed months; use weekNumber as placeholder)
-                            await prisma.rOIRecord.create({
-                                data: {
-                                    userId: user.id,
-                                    investmentId: investment.id,
-                                    weekNumber: monthsMissed * 4 + (lastRoiRecord?.weekNumber || 0), // Approximate (4 weeks/month)
-                                    roiAmount: new Prisma.Decimal(totalMissedRoi),
-                                    isReferralBonusApplied: false,
-                                },
-                            });
-                            // Create transaction record
-                            await prisma.transaction.create({
-                                data: {
-                                    userId: user.id,
-                                    type: 'ROI',
-                                    amount: new Prisma.Decimal(totalMissedRoi),
-                                    status: 'SUCCESS',
-                                    description: `Missed monthly ROI credit for ${monthsMissed} months on investment ${investment.id}`,
-                                    investmentId: investment.id,
-                                },
-                            });
-                        }
+                                data: { balance: { increment: new Prisma.Decimal(totalAmount) } },
+                            }),
+                            prisma.rOIRecord.createMany({
+                                data: roiRecords,
+                                skipDuplicates: true, // DB-level safety
+                            }),
+                            prisma.transaction.createMany({
+                                data: transactions,
+                            }),
+                        ]);
                     }
                 }
-                // Refetch user after updates to return fresh data
-                const updatedUser = await prisma.user.findUnique({
-                    where: { id: id },
-                    include: {
-                        wallet: true,
-                        referredBy: { select: { id: true, name: true, email: true } },
-                    },
-                });
-                return res.status(StatusCodes.OK).json({
-                    data: updatedUser,
-                });
+                // ---------------- MONTHLY ROI ----------------
+                else if (plan.roiPerMonth) {
+                    const monthlyRoi = amountInvested * Number(plan.roiPerMonth);
+                    const roiRecords = [];
+                    const transactions = [];
+                    let totalAmount = 0;
+                    while (cursorDate < today) {
+                        const nextMonth = new Date(cursorDate);
+                        nextMonth.setMonth(nextMonth.getMonth() + 1);
+                        if (nextMonth <= today) {
+                            totalAmount += monthlyRoi;
+                            roiRecords.push({
+                                userId: user.id,
+                                investmentId: investment.id,
+                                creditedForDate: nextMonth,
+                                roiAmount: new Prisma.Decimal(monthlyRoi),
+                                isReferralBonusApplied: false,
+                                weekNumber: 0
+                            });
+                            transactions.push({
+                                userId: user.id,
+                                type: 'ROI',
+                                amount: new Prisma.Decimal(monthlyRoi),
+                                status: 'SUCCESS',
+                                description: `Monthly ROI for ${nextMonth.toLocaleString('en-US', {
+                                    month: 'long',
+                                    year: 'numeric',
+                                })}`,
+                                investmentId: investment.id,
+                            });
+                        }
+                        cursorDate = nextMonth;
+                    }
+                    if (roiRecords.length > 0) {
+                        await prisma.$transaction([
+                            prisma.wallet.update({
+                                where: { userId: user.id },
+                                data: { balance: { increment: new Prisma.Decimal(totalAmount) } },
+                            }),
+                            prisma.rOIRecord.createMany({
+                                data: roiRecords,
+                                skipDuplicates: true,
+                            }),
+                            prisma.transaction.createMany({
+                                data: transactions,
+                            }),
+                        ]);
+                    }
+                }
             }
-            return res.status(StatusCodes.OK).json({
-                data: user,
+            // --------------------------------------------------
+            // RETURN UPDATED USER
+            // --------------------------------------------------
+            const updatedUser = await prisma.user.findUnique({
+                where: { id: id },
+                include: {
+                    wallet: true,
+                    referredBy: { select: { id: true, name: true, email: true } },
+                },
             });
+            return res.status(StatusCodes.OK).json({ data: updatedUser });
         }
         catch (error) {
-            console.error('Error fetching user:', error);
+            console.error('Error:', error);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 error: 'Failed to fetch user',
             });

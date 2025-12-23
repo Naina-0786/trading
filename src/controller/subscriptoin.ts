@@ -7,7 +7,7 @@ export const subscriptionPlanController = {
   // Create a new subscription plan
   async createSubscriptionPlan(req: Request, res: Response) {
     try {
-      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
+      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, maximumEarning, durationInMonths, description, isActive } = req.body;
 
       // Validate required fields
       if (!name || minimumInvestment === undefined || maximumInvestment === undefined || durationInMonths === undefined) {
@@ -66,6 +66,7 @@ export const subscriptionPlanController = {
           maximumInvestment,
           roiPerMonth,
           roiPerDay,
+          maximumEarning,
           durationInMonths,
           description,
           isActive: isActive !== undefined ? isActive : true,
@@ -77,6 +78,7 @@ export const subscriptionPlanController = {
           maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
+          maximumEarning: true,
           durationInMonths: true,
           description: true,
           isActive: true,
@@ -165,6 +167,7 @@ export const subscriptionPlanController = {
           maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
+          maximumEarning: true,
           durationInMonths: true,
           description: true,
           isActive: true,
@@ -209,7 +212,7 @@ export const subscriptionPlanController = {
   async updateSubscriptionPlan(req: Request, res: Response) {
     try {
       const id  = req.params.id as string;
-      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, durationInMonths, description, isActive } = req.body;
+      const { name, minimumInvestment, maximumInvestment, roiPerMonth, roiPerDay, maximumEarning, durationInMonths, description, isActive } = req.body;
 
       // Check if subscription plan exists
       const subscriptionPlan = await prisma.subscriptionPlan.findUnique({ where: { id } });
@@ -246,6 +249,7 @@ export const subscriptionPlanController = {
       if (roiPerMonth !== undefined) updateData.roiPerMonth = roiPerMonth;
       if (roiPerDay !== undefined) updateData.roiPerDay = roiPerDay;
       if (durationInMonths !== undefined) updateData.durationInMonths = durationInMonths;
+      if (maximumEarning !== undefined) updateData.maximumEarning = maximumEarning;
       if (description !== undefined) updateData.description = description;
       if (isActive !== undefined) updateData.isActive = isActive;
 
@@ -287,6 +291,7 @@ export const subscriptionPlanController = {
           maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
+          maximumEarning: true,
           durationInMonths: true,
           description: true,
           isActive: true,
@@ -355,6 +360,7 @@ export const subscriptionPlanController = {
           maximumInvestment: true,
           roiPerMonth: true,
           roiPerDay: true,
+          maximumEarning: true,
           durationInMonths: true,
           investments: {
             select: {
