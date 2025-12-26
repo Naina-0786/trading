@@ -109,12 +109,29 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     const referralData = months.map((m) => {
         return { month: m.month, earnings: Number(m.referral.toFixed(4)) };
     });
-    // Active Subscriptions
-    const activeInvestments = await prisma.investment.findMany({
+    // Calculate Maximum Earning
+    // Fetch global settings for maxiumEarningReturn
+    const settings = await prisma.setting.findFirst();
+    const maxEarningMultiplier = settings?.maxiumEarningReturn || 0;
+    let totalMaximumEarning = 0;
+    if (maxEarningMultiplier > 0) {
+        // We already have activeInvestments fetched below, but we need it here.
+        // Let's reuse the query logic or move the activeInvestments query up.
+        // Since activeInvestments is needed for both activeSubs and calculation, let's fetch it earlier or just run a reduce here.
+        // Actually, let's fetch active investments here to be safe and clean, or move the existing query up.
+        // Moving existing query up seems cleaner.
+    }
+    // Refactoring to fetch active investments earlier
+    const activeInvestmentsList = await prisma.investment.findMany({
         where: { userId, status: "ACTIVE" },
         include: { plan: true },
     });
-    const activeSubs = activeInvestments.map((inv) => {
+    if (maxEarningMultiplier > 0) {
+        totalMaximumEarning = activeInvestmentsList.reduce((sum, inv) => {
+            return sum + (Number(inv.amountInvested) * maxEarningMultiplier);
+        }, 0);
+    }
+    const activeSubs = activeInvestmentsList.map((inv) => {
         let remainingMonths = 0;
         if (inv.endDate) {
             remainingMonths = Math.ceil((new Date(inv.endDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30));
@@ -149,6 +166,7 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
             monthlyROI: Number(monthlyRoiAmount.toFixed(4)),
             dailyROI: Number(dailyRoiAmount.toFixed(4)),
             referralEarnings: Number(Number(user.totalEarnings).toFixed(4)),
+            maximumEarning: Number(totalMaximumEarning.toFixed(2)),
         },
         charts: {
             balanceData,

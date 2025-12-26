@@ -12050,8 +12050,18 @@ export namespace Prisma {
 
   export type AggregateSetting = {
     _count: SettingCountAggregateOutputType | null
+    _avg: SettingAvgAggregateOutputType | null
+    _sum: SettingSumAggregateOutputType | null
     _min: SettingMinAggregateOutputType | null
     _max: SettingMaxAggregateOutputType | null
+  }
+
+  export type SettingAvgAggregateOutputType = {
+    maxiumEarningReturn: number | null
+  }
+
+  export type SettingSumAggregateOutputType = {
+    maxiumEarningReturn: number | null
   }
 
   export type SettingMinAggregateOutputType = {
@@ -12061,6 +12071,7 @@ export namespace Prisma {
     activeUser: string | null
     totalUser: string | null
     location: string | null
+    maxiumEarningReturn: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12072,6 +12083,7 @@ export namespace Prisma {
     activeUser: string | null
     totalUser: string | null
     location: string | null
+    maxiumEarningReturn: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12083,11 +12095,20 @@ export namespace Prisma {
     activeUser: number
     totalUser: number
     location: number
+    maxiumEarningReturn: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type SettingAvgAggregateInputType = {
+    maxiumEarningReturn?: true
+  }
+
+  export type SettingSumAggregateInputType = {
+    maxiumEarningReturn?: true
+  }
 
   export type SettingMinAggregateInputType = {
     id?: true
@@ -12096,6 +12117,7 @@ export namespace Prisma {
     activeUser?: true
     totalUser?: true
     location?: true
+    maxiumEarningReturn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12107,6 +12129,7 @@ export namespace Prisma {
     activeUser?: true
     totalUser?: true
     location?: true
+    maxiumEarningReturn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12118,6 +12141,7 @@ export namespace Prisma {
     activeUser?: true
     totalUser?: true
     location?: true
+    maxiumEarningReturn?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12161,6 +12185,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SettingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SettingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SettingMinAggregateInputType
@@ -12191,6 +12227,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SettingCountAggregateInputType | true
+    _avg?: SettingAvgAggregateInputType
+    _sum?: SettingSumAggregateInputType
     _min?: SettingMinAggregateInputType
     _max?: SettingMaxAggregateInputType
   }
@@ -12202,9 +12240,12 @@ export namespace Prisma {
     activeUser: string | null
     totalUser: string | null
     location: string | null
+    maxiumEarningReturn: number | null
     createdAt: Date
     updatedAt: Date
     _count: SettingCountAggregateOutputType | null
+    _avg: SettingAvgAggregateOutputType | null
+    _sum: SettingSumAggregateOutputType | null
     _min: SettingMinAggregateOutputType | null
     _max: SettingMaxAggregateOutputType | null
   }
@@ -12230,6 +12271,7 @@ export namespace Prisma {
     activeUser?: boolean
     totalUser?: boolean
     location?: boolean
+    maxiumEarningReturn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["setting"]>
@@ -12243,11 +12285,12 @@ export namespace Prisma {
     activeUser?: boolean
     totalUser?: boolean
     location?: boolean
+    maxiumEarningReturn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "activeUser" | "totalUser" | "location" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
+  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "email" | "activeUser" | "totalUser" | "location" | "maxiumEarningReturn" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
 
   export type $SettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Setting"
@@ -12259,6 +12302,7 @@ export namespace Prisma {
       activeUser: string | null
       totalUser: string | null
       location: string | null
+      maxiumEarningReturn: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["setting"]>
@@ -12636,6 +12680,7 @@ export namespace Prisma {
     readonly activeUser: FieldRef<"Setting", 'String'>
     readonly totalUser: FieldRef<"Setting", 'String'>
     readonly location: FieldRef<"Setting", 'String'>
+    readonly maxiumEarningReturn: FieldRef<"Setting", 'Int'>
     readonly createdAt: FieldRef<"Setting", 'DateTime'>
     readonly updatedAt: FieldRef<"Setting", 'DateTime'>
   }
@@ -17750,6 +17795,7 @@ export namespace Prisma {
     activeUser: 'activeUser',
     totalUser: 'totalUser',
     location: 'location',
+    maxiumEarningReturn: 'maxiumEarningReturn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -18937,6 +18983,7 @@ export namespace Prisma {
     activeUser?: StringNullableFilter<"Setting"> | string | null
     totalUser?: StringNullableFilter<"Setting"> | string | null
     location?: StringNullableFilter<"Setting"> | string | null
+    maxiumEarningReturn?: IntNullableFilter<"Setting"> | number | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
   }
@@ -18948,6 +18995,7 @@ export namespace Prisma {
     activeUser?: SortOrderInput | SortOrder
     totalUser?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    maxiumEarningReturn?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _relevance?: SettingOrderByRelevanceInput
@@ -18963,6 +19011,7 @@ export namespace Prisma {
     activeUser?: StringNullableFilter<"Setting"> | string | null
     totalUser?: StringNullableFilter<"Setting"> | string | null
     location?: StringNullableFilter<"Setting"> | string | null
+    maxiumEarningReturn?: IntNullableFilter<"Setting"> | number | null
     createdAt?: DateTimeFilter<"Setting"> | Date | string
     updatedAt?: DateTimeFilter<"Setting"> | Date | string
   }, "id">
@@ -18974,11 +19023,14 @@ export namespace Prisma {
     activeUser?: SortOrderInput | SortOrder
     totalUser?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    maxiumEarningReturn?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SettingCountOrderByAggregateInput
+    _avg?: SettingAvgOrderByAggregateInput
     _max?: SettingMaxOrderByAggregateInput
     _min?: SettingMinOrderByAggregateInput
+    _sum?: SettingSumOrderByAggregateInput
   }
 
   export type SettingScalarWhereWithAggregatesInput = {
@@ -18991,6 +19043,7 @@ export namespace Prisma {
     activeUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     totalUser?: StringNullableWithAggregatesFilter<"Setting"> | string | null
     location?: StringNullableWithAggregatesFilter<"Setting"> | string | null
+    maxiumEarningReturn?: IntNullableWithAggregatesFilter<"Setting"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
   }
@@ -20157,6 +20210,7 @@ export namespace Prisma {
     activeUser?: string | null
     totalUser?: string | null
     location?: string | null
+    maxiumEarningReturn?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20168,6 +20222,7 @@ export namespace Prisma {
     activeUser?: string | null
     totalUser?: string | null
     location?: string | null
+    maxiumEarningReturn?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20179,6 +20234,7 @@ export namespace Prisma {
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    maxiumEarningReturn?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20190,6 +20246,7 @@ export namespace Prisma {
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    maxiumEarningReturn?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20201,6 +20258,7 @@ export namespace Prisma {
     activeUser?: string | null
     totalUser?: string | null
     location?: string | null
+    maxiumEarningReturn?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20212,6 +20270,7 @@ export namespace Prisma {
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    maxiumEarningReturn?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20223,6 +20282,7 @@ export namespace Prisma {
     activeUser?: NullableStringFieldUpdateOperationsInput | string | null
     totalUser?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    maxiumEarningReturn?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21523,6 +21583,17 @@ export namespace Prisma {
     roiAmount?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type SettingOrderByRelevanceInput = {
     fields: SettingOrderByRelevanceFieldEnum | SettingOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -21536,8 +21607,13 @@ export namespace Prisma {
     activeUser?: SortOrder
     totalUser?: SortOrder
     location?: SortOrder
+    maxiumEarningReturn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SettingAvgOrderByAggregateInput = {
+    maxiumEarningReturn?: SortOrder
   }
 
   export type SettingMaxOrderByAggregateInput = {
@@ -21547,6 +21623,7 @@ export namespace Prisma {
     activeUser?: SortOrder
     totalUser?: SortOrder
     location?: SortOrder
+    maxiumEarningReturn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -21558,8 +21635,29 @@ export namespace Prisma {
     activeUser?: SortOrder
     totalUser?: SortOrder
     location?: SortOrder
+    maxiumEarningReturn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SettingSumOrderByAggregateInput = {
+    maxiumEarningReturn?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumSupportTicketStatusFilter<$PrismaModel = never> = {
@@ -22660,6 +22758,14 @@ export namespace Prisma {
     update?: XOR<XOR<InvestmentUpdateToOneWithWhereWithoutRoiRecordsInput, InvestmentUpdateWithoutRoiRecordsInput>, InvestmentUncheckedUpdateWithoutRoiRecordsInput>
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserCreateNestedOneWithoutSupportTicketInput = {
     create?: XOR<UserCreateWithoutSupportTicketInput, UserUncheckedCreateWithoutSupportTicketInput>
     connectOrCreate?: UserCreateOrConnectWithoutSupportTicketInput
@@ -23111,6 +23217,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTransferStatusFilter<$PrismaModel>
     _max?: NestedEnumTransferStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumSupportTicketStatusFilter<$PrismaModel = never> = {

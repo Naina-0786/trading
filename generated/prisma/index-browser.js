@@ -243,6 +243,7 @@ exports.Prisma.SettingScalarFieldEnum = {
   activeUser: 'activeUser',
   totalUser: 'totalUser',
   location: 'location',
+  maxiumEarningReturn: 'maxiumEarningReturn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

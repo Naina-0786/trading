@@ -176,25 +176,49 @@ export const subscriptionPlanController = {
         },
       });
 
+      // Fetch global settings for maxiumEarningReturn
+      const settings = await prisma.setting.findFirst();
+      const maxEarningMultiplier = settings?.maxiumEarningReturn || 0;
+
       // Check user's investments to see which plans they have purchased only if logged in
       let hasAnySubscriptions = false;
-      let userPlanIds = new Set();
+      const userInvestmentsMap = new Map<string, number>();
+
       if (userId) {
         const userInvestments = await prisma.investment.findMany({
           where: {
             userId,
             status: { in: ['ACTIVE', 'COMPLETED'] }, // Assuming purchased means active or completed
           },
-          select: { planId: true },
+          select: { planId: true, amountInvested: true },
         });
-        userPlanIds = new Set(userInvestments.map(inv => inv.planId));
-        hasAnySubscriptions = userPlanIds.size > 0;
+
+        userInvestments.forEach(inv => {
+          const amount = Number(inv.amountInvested);
+          const currentTotal = userInvestmentsMap.get(inv.planId) || 0;
+          userInvestmentsMap.set(inv.planId, currentTotal + amount);
+        });
+
+        hasAnySubscriptions = userInvestments.length > 0;
       }
 
-      const plansWithUserInfo = subscriptionPlans.map(plan => ({
-        ...plan,
-        isSubscribed: userPlanIds.has(plan.id),
-      }));
+      const plansWithUserInfo = subscriptionPlans.map(plan => {
+        const investedAmount = userInvestmentsMap.get(plan.id);
+        const isSubscribed = investedAmount !== undefined;
+
+        // Calculate dynamic maximum earning if subscribed
+        // Otherwise, return null to hide it (removing the static plan value)
+        let dynamicMaximumEarning = null;
+        if (isSubscribed) {
+          dynamicMaximumEarning = (investedAmount || 0) * maxEarningMultiplier;
+        }
+
+        return {
+          ...plan,
+          isSubscribed,
+          maximumEarning: dynamicMaximumEarning,
+        };
+      });
 
       return res.status(StatusCodes.OK).json({
         data: plansWithUserInfo,
