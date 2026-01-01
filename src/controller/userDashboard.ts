@@ -115,14 +115,19 @@ export const getUserDashboard = asyncHandler(async (req, res, next) => {
     }
   });
 
-  let cumulative = 0;
-  const balanceData = months.map((m) => {
-    cumulative += m.total;
-    return { month: m.month, balance: Number(cumulative.toFixed(4)) };
-  });
+  // FIX: Only show data up to current month to avoid confusing future projections
+  const currentMonthIndex = now.getMonth();
 
-  const referralData = months.map((m) => {
-    return { month: m.month, earnings: Number(m.referral.toFixed(4)) };
+  let cumulative = 0;
+  const balanceData: any[] = [];
+  const referralData: any[] = [];
+
+  months.forEach((m, index) => {
+    if (index <= currentMonthIndex) {
+      cumulative += m.total;
+      balanceData.push({ month: m.month, balance: Number(cumulative.toFixed(4)) });
+      referralData.push({ month: m.month, earnings: Number(m.referral.toFixed(4)) });
+    }
   });
 
   // Calculate Maximum Earning
