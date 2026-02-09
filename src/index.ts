@@ -19,6 +19,7 @@ import paymentRoutes from "./routes/payment.routes.js";
 import qrRoutes from "./routes/qr.routes.js";
 
 import routers from "./routes/active.routes.js";
+import enquiryRoutes from "./routes/enquiry.routes.js";
 import userDashboardRoute from "./routes/userDashboard.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 
@@ -69,6 +70,8 @@ app.use("/api/admin", adminRoutes);
 app.use('/api/qr-code', qrRoutes);
 app.use('/api/dashboardRoutes',dashboardRoutes);
 app.use('/api/setting', routers);
+
+app.use("/api/enquiry", enquiryRoutes);
 
 app.use("/api/user-dashboard", userDashboardRoute)
 app.use("/api/notifications", notificationRoutes);

@@ -293,6 +293,17 @@ exports.Prisma.UserNotificationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.EnquiryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -420,6 +431,15 @@ exports.Prisma.UserNotificationOrderByRelevanceFieldEnum = {
   userId: 'userId',
   notificationId: 'notificationId'
 };
+
+exports.Prisma.EnquiryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message'
+};
 exports.InvestmentStatus = exports.$Enums.InvestmentStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
@@ -496,7 +516,8 @@ exports.Prisma.ModelName = {
   admin: 'admin',
   QrCode: 'QrCode',
   Notification: 'Notification',
-  UserNotification: 'UserNotification'
+  UserNotification: 'UserNotification',
+  Enquiry: 'Enquiry'
 };
 
 /**
